@@ -46,6 +46,64 @@ public class NewAccount_Activity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
 
+        //Añadimos una accion al pulsar el boton para registrarse
+        bRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Declaramos un intent desde esta actividad hasta la principal
+                Intent intent = new Intent(NewAccount_Activity.this, Home_Activity.class);
+
+                //Si tenemos conexion a internet obtenemos los datos que el usuario ha introducido en las cajas de texto
+                if(utils.comprobarInternet(getBaseContext())){
+                    if(!textNameR.getText().toString().isEmpty() && !textPasswordR.getText().toString().isEmpty()  && !textNumberR.getText().toString().isEmpty()  && !textAdressR.getText().toString().isEmpty() ) {
+                        String user = textNameR.getText().toString();
+                        String password = textPasswordR.getText().toString();
+                        String number = textNumberR.getText().toString();
+                        String adress = textAdressR.getText().toString();
+
+                        //Llamamos al metodo checkUser con opcion 2, que nos dirá si el usuario ya existe
+                        String userCheck = db_management.checkUser(user, password, 2);
+
+                        //Si el usuario no existe, lo añade a la BBDD , lanza un toast e inicia el intent
+                        if(userCheck == null){
+                            if(db_management.insertUser(user,password,number,adress) != -1){
+                                createToast("Usuario creado correctamente",R.drawable.tick,Color.GREEN);
+                                utils.setPreferences(user,sharedPreferences);
+                                startActivity(intent);
+                            }
+                        }else{
+                            createToast("El usuario ya existe.",R.drawable.cross,Color.RED);
+                        }
+                    }else{
+                        createToast("Debes rellenar todos los campos.",R.drawable.cross,Color.RED);
+                    }
+
+                    //Si no dispone de conexion a internet, nos lanza un alertDialog que nos pregunta si queremos iniciar sesion como invitado
+                }else{
+                    createAlertDialog("Parece que está sin conexión, ¿desea acceder como invitado?",intent);
+                }
+
+            }
+        });
+    }
+
+    //Método para crear un alertDialog en esta actividad
+    public void createAlertDialog(String title,Intent intent){
+        SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        final CharSequence[] opciones = {"Aceptar","Cancelar"};
+        alertDialog.setTitle(title);
+        alertDialog.setItems(opciones, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                //Si pulsamos el boton de aceptar
+                if(opciones[i].equals("Aceptar")){
+                    utils.setPreferences("Invitado001",sharedPreferences);
+                    startActivity(intent);
+                }
+            }
+        });
+        alertDialog.show();
     }
     //Método para crear Toast personalizados
     public void createToast(String title, int icon,int backgroundcolor){

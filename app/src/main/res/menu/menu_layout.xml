@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/food_option"
+        android:icon="@drawable/food_icon"
+        android:title="Comida"
+        app:showAsAction="ifRoom|withText" />
+
+    <item
+        android:id="@+id/home_option"
+        android:icon="@drawable/home_icon"
+        android:title="Inicio"
+        app:showAsAction="ifRoom|withText" />
+    <item
+        android:id="@+id/user_option"
+        android:icon="@drawable/user_icon"
+        android:title="Perfil"
+        app:showAsAction="ifRoom|withText" />
+
+</menu>

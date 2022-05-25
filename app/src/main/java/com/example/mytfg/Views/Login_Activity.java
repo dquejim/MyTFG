@@ -50,6 +50,59 @@ public class Login_Activity extends AppCompatActivity {
             db_management.insertUser("Invitado001", "user", "333", "Default");
         }
 
+        //Accion al pulsar el botón de registrarse de la pantalla de login
+        bRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(utils.comprobarInternet(getBaseContext())){
+                    //Si disponemos de internet, nos enviará a la pantalla de registro de usuario
+                    Intent intent = new Intent(Login_Activity.this, NewAccount_Activity.class);
+                    startActivity(intent);
+                    //Si no, nos pregunta si queremos entrar como invitado
+                }else{
+                    Intent intent = new Intent(Login_Activity.this, Home_Activity.class);
+                    createAlertDialog("Parece que está sin conexión, ¿desea acceder como invitado?",intent);
+                }
+            }
+        });
+
+        //Accion del boton de login
+        bLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Declaramos un intent hacia la home_activity
+                Intent intent = new Intent(Login_Activity.this, Home_Activity.class);
+
+                //Si disponemos de internet obtenemos el usuario y contraseña introducidos
+                if(utils.comprobarInternet(getBaseContext())){
+                    if(!textName.getText().toString().isEmpty() && !textPassword.getText().toString().isEmpty()) {
+                        String user = textName.getText().toString();
+                        String password = textPassword.getText().toString();
+
+                        //Comprobamos si la contraseña pertenece al usuario con la opcion 1 del método checkUser
+                        if (db_management.checkUser(user, password, 1) != null) {
+
+                            //Lanzamos un toast de login correcto
+                            createToast("Login correcto!",R.drawable.tick,Color.GREEN);
+
+                            //Iniciamos el intent pasandole el nombre de usuario
+                            utils.setPreferences(user,sharedPreferences);
+                            startActivity(intent);
+
+                            //Si no coindide la contraseña con el usuario, nos lanza un toast de error
+                        } else {
+                            createToast("Usuario o contraseña incorrectos.",R.drawable.cross,Color.RED);
+                        }
+                    }else{
+                        createToast("Usuario o contraseña incorrectos.",R.drawable.cross,Color.RED);
+                    }
+
+                    //Si no hay conexion a Internet, nos pregunta si queremos conectarnos como usuario
+                }else{
+                    createAlertDialog("Parece que está sin conexión, ¿desea acceder como invitado?",intent);
+                }
+            }
+        });
 
     }
 
