@@ -7,22 +7,36 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
-        android:layout_width="365dp"
-        android:layout_height="106dp"
+        android:layout_width="307dp"
+        android:layout_height="53dp"
         android:layout_marginTop="20dp"
-        app:cardBackgroundColor="#9A7E7E"
+        app:cardBackgroundColor="#FFFFFF"
+        app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toTopOf="@+id/menu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.553"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fakeMapView"
-        app:layout_constraintVertical_bias="0.731" >
+        app:layout_constraintVertical_bias="0.731">
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:background="#774B4B"
+            app:srcCompat="@android:color/transparent" />
 
         <TextView
             android:id="@+id/secondOfferDesc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/abel"
+            android:gravity="center"
+            android:text="TextView"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
     </androidx.cardview.widget.CardView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -91,10 +105,12 @@
         app:layout_constraintVertical_bias="0.069" />
 
     <androidx.cardview.widget.CardView
-        android:layout_width="365dp"
-        android:layout_height="106dp"
+        android:id="@+id/cardView2"
+        android:layout_width="300dp"
+        android:layout_height="53dp"
         android:layout_marginTop="20dp"
-        app:cardBackgroundColor="#9A7E7E"
+        app:cardBackgroundColor="#FFFFFF"
+        app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toTopOf="@+id/cardView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -102,10 +118,22 @@
 
         <TextView
             android:id="@+id/firstOfferDesc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/abel"
+            android:gravity="center"
             android:text="TextView"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="20sp"
             android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            android:background="#774B4B"
+            app:srcCompat="@android:color/transparent" />
 
     </androidx.cardview.widget.CardView>
 

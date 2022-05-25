@@ -14,18 +14,28 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mytfg.Control.DB_Management;
 import com.example.mytfg.Control.Utils;
+import com.example.mytfg.Models.Offer;
 import com.example.mytfg.R;
 import com.example.mytfg.Models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import java.util.Calendar;
+
 public class Home_Activity extends AppCompatActivity{
 
     DB_Management db_management = new DB_Management(this);
     User user;
+    Offer firstOffer;
+    Offer secondOffer;
     TextView userNameView;
+
     ImageButton exitButton;
     ImageButton fakeMapsView;
+
+    TextView firstOfferDesc;
+    TextView secondOfferDesc;
+    Calendar c = Calendar.getInstance();
 
     Utils utils = new Utils();
     BottomNavigationView bottomNavigationView;
@@ -61,6 +71,17 @@ public class Home_Activity extends AppCompatActivity{
                 }
             }
         });
+
+        String dayOfTheWeek = String.valueOf(c.get(Calendar.DAY_OF_WEEK));
+
+        firstOffer = db_management.getOffers(dayOfTheWeek).get(0);
+        secondOffer = db_management.getOffers(dayOfTheWeek).get(1);
+
+        firstOfferDesc = findViewById(R.id.firstOfferDesc);
+        firstOfferDesc.setText(firstOffer.getName());
+
+        secondOfferDesc = findViewById(R.id.secondOfferDesc);
+        secondOfferDesc.setText(secondOffer.getName());
 
         bottomNavigationView = findViewById(R.id.menu);
         bottomNavigationView.setSelectedItemId(R.id.home_option);
