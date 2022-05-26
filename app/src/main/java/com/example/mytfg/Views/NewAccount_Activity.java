@@ -98,7 +98,7 @@ public class NewAccount_Activity extends AppCompatActivity {
             public void onClick(DialogInterface dialogInterface, int i) {
                 //Si pulsamos el boton de aceptar
                 if(opciones[i].equals("Aceptar")){
-                    utils.setPreferences("Invitado001",sharedPreferences);
+                    utils.setPreferences("Invitado",sharedPreferences);
                     startActivity(intent);
                 }
             }

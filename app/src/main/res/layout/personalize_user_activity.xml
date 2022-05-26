@@ -3,13 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/backgroud">
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/menu"
-        android:layout_width="419dp"
+        android:layout_width="410dp"
         android:layout_height="58dp"
-        android:background="#FFFFFF"
+        android:background="#BAB9B9"
         app:itemRippleColor="#000000"
         app:itemTextColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"

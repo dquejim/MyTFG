@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.mytfg.Models.Local;
 import com.example.mytfg.Models.Offer;
 import com.example.mytfg.Models.User;
 
@@ -18,20 +19,27 @@ public class DB_Management extends SQLiteOpenHelper{
     private static final int CURRENT_VERSION = 1;
     private String CREATE_TABLE_LOGIN = "";
     private String CREATE_TABLE_OFFER = "";
+    private String CREATE_TABLE_DATA = "";
 
-    //Login variables
+    //Login - variables
     private String tableLogin = "login_table";
     private String tbLogin_userColumn = "user";
     private String tbLogin_passwordColumn = "password";
     private String tbLogin_numberColumn = "number";
     private String tbLogin_adressColumn = "adress";
 
-    //Ofertas variables
+    //Ofertas - variables
     private String tableOffer = "offer_table";
     private String tbOffer_idColumn= "id";
     private String tbOffer_nameColumn = "name";
     private String tbOffer_dayColumn = "week_day";
     private String tbOffer_priceColumn = "price";
+
+    //Datos del local - variables
+    private String tableLocalData= "localData_table";
+    private String tbLocal_idColumn = "id";
+    private String tbLocal_ubicationColumn = "ubication";
+    private String tbLocal_adressColumn = "adress";
 
     private Context cContext;
 
@@ -57,9 +65,15 @@ public class DB_Management extends SQLiteOpenHelper{
                 tbOffer_dayColumn +" TEXT," +
                 tbOffer_priceColumn + " TEXT)";
 
+        CREATE_TABLE_DATA = "CREATE TABLE " + tableLocalData + "(" +
+                tbLocal_idColumn +" TEXT," +
+                tbLocal_ubicationColumn +" TEXT," +
+                tbLocal_adressColumn +" TEXT)";
+
 
         sqLiteDatabase.execSQL(CREATE_TABLE_LOGIN);
         sqLiteDatabase.execSQL(CREATE_TABLE_OFFER);
+        sqLiteDatabase.execSQL(CREATE_TABLE_DATA);
 
 
     }
@@ -239,5 +253,51 @@ public class DB_Management extends SQLiteOpenHelper{
 
         insertOfferData("D101","Pizza andaluza \nLambrusco","7","18€");
         insertOfferData("D102","Nuggets de pollo 20 u. \nRación de patatas fritas","7","10€");
+    }
+
+    //Método para insertar un local en la BBDD
+    public long insertLocalData(String id, String ubication, String adress){
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        long query_result = -1;
+
+        ContentValues values = new ContentValues();
+
+        //Valores a insertar en la tabla
+        values.put(tbLocal_idColumn,id);
+        values.put(tbLocal_ubicationColumn, ubication);
+        values.put(tbLocal_adressColumn,adress);
+
+        //Instruccion para insertar en la tabla, indicando los valores y el nombre de la misma
+        query_result = db.insert(tableLocalData,null,values);
+
+        db.close();
+
+        return query_result;
+
+    }
+
+    //Método para obtener todos los datos de un local
+    public List<Local> getLocalData(String id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<Local> results= new ArrayList<>();
+        Local localList = null;
+        String[] columns = new String[]{tbLocal_idColumn,tbLocal_ubicationColumn,tbLocal_adressColumn};
+
+        //Abrimos cursor con todos los resultados de la consulta
+        Cursor c = db.query(tableLocalData,columns,tbLocal_idColumn+"=?", new String[]{id},null,null,null);
+
+        //Si hay datos en nuestro cursor, obtenemos todos los datos de la columna y tabla indicadas
+        if(c.moveToFirst()){
+            do{
+                localList = new Local(c.getString(0),c.getString(1),c.getString(2));
+                results.add(localList);
+            }while(c.moveToNext());
+        }
+
+        db.close();
+
+        //Devolvemos los resultados
+        return results;
     }
 }

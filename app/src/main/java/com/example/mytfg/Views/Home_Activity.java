@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mytfg.Control.DB_Management;
 import com.example.mytfg.Control.Utils;
+import com.example.mytfg.Models.Local;
 import com.example.mytfg.Models.Offer;
 import com.example.mytfg.R;
 import com.example.mytfg.Models.User;
@@ -32,9 +34,13 @@ public class Home_Activity extends AppCompatActivity{
 
     ImageButton exitButton;
     ImageButton fakeMapsView;
+    ImageView optionalImageView;
+    Local local;
 
     TextView firstOfferDesc;
     TextView secondOfferDesc;
+    TextView firstOfferPrice;
+    TextView secondOfferPrice;
     Calendar c = Calendar.getInstance();
 
     Utils utils = new Utils();
@@ -48,6 +54,8 @@ public class Home_Activity extends AppCompatActivity{
 
         SharedPreferences sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         user = db_management.getUser(utils.getPreferences(sharedPreferences));
+        local = db_management.getLocalData("01").get(0);
+
         userNameView = findViewById(R.id.userNameView);
         userNameView.setText("Bienvenido " + user.getName()+ "!");
 
@@ -60,12 +68,18 @@ public class Home_Activity extends AppCompatActivity{
             }
         });
 
+        optionalImageView = findViewById(R.id.optionalImageView);
+        if(utils.comprobarInternet(this)){
+            optionalImageView.setVisibility(View.VISIBLE);
+        }else{
+            optionalImageView.setVisibility(View.INVISIBLE);
+        }
         fakeMapsView = findViewById(R.id.fakeMapView);
         fakeMapsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(utils.comprobarInternet(getBaseContext())) {
-                    Uri _link = Uri.parse("https://goo.gl/maps/5MdAZttVLEe5jzr5A");
+                    Uri _link = Uri.parse(local.getUbicationLink());
                     Intent i = new Intent(Intent.ACTION_VIEW, _link);
                     startActivity(i);
                 }
@@ -77,11 +91,15 @@ public class Home_Activity extends AppCompatActivity{
         firstOffer = db_management.getOffers(dayOfTheWeek).get(0);
         secondOffer = db_management.getOffers(dayOfTheWeek).get(1);
 
+        firstOfferPrice = findViewById(R.id.firstOfferPrice);
         firstOfferDesc = findViewById(R.id.firstOfferDesc);
         firstOfferDesc.setText(firstOffer.getName());
+        firstOfferPrice.setText(firstOffer.getPrice());
 
+        secondOfferPrice = findViewById(R.id.secondOfferPrice);
         secondOfferDesc = findViewById(R.id.secondOfferDesc);
         secondOfferDesc.setText(secondOffer.getName());
+        secondOfferPrice.setText(secondOffer.getPrice());
 
         bottomNavigationView = findViewById(R.id.menu);
         bottomNavigationView.setSelectedItemId(R.id.home_option);

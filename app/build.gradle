@@ -38,4 +38,6 @@ dependencies {
 
     //Biblioteca externa StyleableToast
     implementation 'io.github.muddz:styleabletoast:2.4.0'
+    //noinspection GradleCompatible
+    implementation 'com.android.support:recyclerview-v7:25.3.0'
 }

@@ -45,9 +45,10 @@ public class Login_Activity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("user",MODE_PRIVATE);
 
         //Comprobamos si el usuario Invitado001 ya existe, si no existe, lo creamos, ya que nos conectaremos a él cuando no dispongamos de conexion
-        if(db_management.checkUser("Invitado001", "", 2) == null){
+        if(db_management.checkUser("Invitado", "", 2) == null){
             //Insertamos en la base de datos el usuario al que nos conectaremos cuando no haya conexión
-            db_management.insertUser("Invitado001", "user", "333", "Default");
+            db_management.insertUser("Invitado", "1234213453", "Default", "Default");
+            db_management.insertLocalData("01","https://goo.gl/maps/5MdAZttVLEe5jzr5A","Calle Almuñecar nº6");
         }
 
         //Accion al pulsar el botón de registrarse de la pantalla de login
@@ -116,7 +117,7 @@ public class Login_Activity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if(opciones[i].equals("Si")){
-                    utils.setPreferences("Invitado001",sharedPreferences);
+                    utils.setPreferences("Invitado",sharedPreferences);
                     startActivity(intent);
                 }
             }

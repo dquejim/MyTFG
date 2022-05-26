@@ -48,7 +48,7 @@ public class PersonalizeUser_Activity extends AppCompatActivity {
         buttonConfirm = findViewById(R.id.buttonConfirm);
         user = db_management.getUser(utils.getPreferences(sharedPreferences));
 
-        if(user.getName().equals("Invitado001")){
+        if(user.getName().equals("Invitado")){
             textPassword.setEnabled(false);
             textNumber.setEnabled(false);
             textAdress.setEnabled(false);
@@ -63,7 +63,7 @@ public class PersonalizeUser_Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(PersonalizeUser_Activity.this,Home_Activity.class);
-                if(user.getName().equals("Invitado001")){
+                if(user.getName().equals("Invitado")){
                     //createToast("No puedes modificar un usuario como invitado!",R.drawable.cross,Color.RED);
                     startActivity(intent);
                 }else{
