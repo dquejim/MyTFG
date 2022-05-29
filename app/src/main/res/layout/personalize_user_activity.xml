@@ -6,6 +6,146 @@
     android:layout_height="match_parent"
     android:background="@drawable/backgroud">
 
+    <androidx.cardview.widget.CardView
+        android:layout_width="330dp"
+        android:layout_height="540dp"
+        android:background="@color/black"
+        app:cardBackgroundColor="#000000"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/menu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="326dp"
+        android:layout_height="536dp"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/menu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/backgroud">
+
+            <EditText
+                android:id="@+id/textNameR2"
+                android:layout_width="250dp"
+                android:layout_height="36dp"
+                android:background="#FFFFFF"
+                android:drawableLeft="@drawable/user_icon"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:maxLength="50"
+                android:paddingStart="10sp"
+                android:textAlignment="viewStart"
+                android:textColor="#000000"
+                android:textColorHighlight="#876969"
+                android:textColorHint="#000000"
+                android:textColorLink="#DCB5B5"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.19999999"
+                />
+
+            <EditText
+                android:id="@+id/textNumberR2"
+                android:layout_width="250dp"
+                android:layout_height="36dp"
+                android:background="#FFFFFF"
+                android:drawableLeft="@drawable/phone_icon"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:maxLength="50"
+                android:paddingStart="10sp"
+                android:textAlignment="viewStart"
+                android:textColor="#000000"
+                android:textColorHint="#000000"
+                app:cardCornerRadius="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/buttonConfirm"
+                android:layout_width="191dp"
+                android:layout_height="53dp"
+                android:backgroundTint="#42AE99"
+                android:text="Aceptar"
+                android:textColor="#FAF8F8"
+                android:textColorHighlight="#553232"
+                android:textColorLink="#985454"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.503"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.842" />
+
+            <EditText
+                android:id="@+id/textPasswordR2"
+                android:layout_width="250dp"
+                android:layout_height="36dp"
+                android:background="#FFFFFF"
+                android:ems="10"
+                android:inputType="textPassword"
+                android:paddingStart="10sp"
+                android:password="true"
+                android:textAlignment="viewStart"
+                android:textColor="#000000"
+                android:textColorHint="#000000"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.35000002"
+                android:drawableLeft="@drawable/eye_icon" />
+
+            <EditText
+                android:id="@+id/textAdressR2"
+                android:layout_width="250dp"
+                android:layout_height="36dp"
+                android:background="#FAFAFA"
+                android:drawableLeft="@drawable/address"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:maxLength="50"
+                android:paddingStart="10sp"
+                android:shadowColor="#FFFFFF"
+                android:textAlignment="viewStart"
+                android:textColor="#000000"
+                android:textColorHint="#000000"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.65999997" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="326dp"
+                android:layout_height="30dp"
+                android:fontFamily="@font/abel"
+                android:gravity="center"
+                android:text="DATOS PERSONALES"
+                android:textColor="#000000"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.031" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/menu"
         android:layout_width="410dp"
@@ -20,116 +160,5 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0"
         app:menu="@menu/menu_layout" />
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="120dp"
-        android:layout_height="128dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.212"
-        app:srcCompat="@drawable/user_icon" />
-
-    <EditText
-        android:id="@+id/textPasswordR2"
-        android:layout_width="296dp"
-        android:layout_height="36dp"
-        android:background="#009688"
-        android:backgroundTint="#585A5A"
-        android:ems="10"
-        android:inputType="textPassword"
-        android:paddingStart="10sp"
-        android:password="true"
-        android:textAlignment="center"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.533" />
-
-    <EditText
-        android:id="@+id/textAdressR2"
-        android:layout_width="298dp"
-        android:layout_height="43dp"
-        android:background="@color/teal_700"
-        android:backgroundTint="#585A5A"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:maxLength="50"
-        android:paddingStart="10sp"
-        android:shadowColor="#FFFFFF"
-        android:textAlignment="center"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.712" />
-
-    <Button
-        android:id="@+id/buttonConfirm"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:backgroundTint="#6F8855"
-        android:textColor="#FAF8F8"
-        android:textColorHighlight="#553232"
-        android:textColorLink="#985454"
-        app:icon="@drawable/user_icon"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.162"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.818" />
-
-    <EditText
-        android:id="@+id/textNumberR2"
-        android:layout_width="298dp"
-        android:layout_height="43dp"
-        android:background="@color/teal_700"
-        android:backgroundTint="#585A5A"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:maxLength="50"
-        android:paddingStart="10sp"
-        android:textAlignment="center"
-        android:textColor="#FFFFFF"
-        android:textColorHint="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.623" />
-
-    <EditText
-        android:id="@+id/textNameR2"
-        android:layout_width="298dp"
-        android:layout_height="43dp"
-        android:background="@color/teal_700"
-        android:backgroundTint="#585A5A"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:maxLength="50"
-        android:paddingStart="10sp"
-        android:textAlignment="center"
-        android:textColor="#FDFDFD"
-        android:textColorHighlight="#876969"
-        android:textColorHint="#FFFFFF"
-        android:textColorLink="#DCB5B5"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.441" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

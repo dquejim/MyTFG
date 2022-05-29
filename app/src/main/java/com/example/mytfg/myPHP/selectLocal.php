@@ -9,23 +9,22 @@ $bd = "BDDavidQuesadaJimenez";
 $conexion = mysqli_connect($server,$user,$pass,$bd)
 or die("Ha sucedido un error inexperado en la conexion de la base de datos");
 
-$sql = "SELECT * FROM tableOffer" ;
+$sql = "SELECT * FROM tbLocalData" ;
 mysqli_set_charset($conexion, "utf8");
 if(!$result = mysqli_query($conexion, $sql)) die();
 
-$offers = array();
+$local = array();
 
 while($row = mysqli_fetch_array($result)) {
-            $id = $row['id'];
-            $name = $row["name"];
-            $week_day = $row["week_day"];
-            $price = $row["price"];
+            $Id = $row['Id'];
+            $Ubication = $row["Ubication"];
+            $Adress = $row["Adress"];
 
-        $offers[] = array('id'=>$id, 'name'=>$name, 'week_day'=>$week_day, 'price'=>$price);
+        $local[] = array('Id'=>$Id, 'Ubication'=>$Ubication, 'Adress'=>$Adress);
 }
 $close = mysqli_close($conexion)or die ("no connection");
 
-$json_string = json_encode($offers);
+$json_string = json_encode($local);
 
 echo $json_string
 ?>

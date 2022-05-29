@@ -234,7 +234,7 @@ public class DB_Management extends SQLiteOpenHelper{
 
     private void insertAllOffers(){
         insertOfferData("L101","Ensalada césar \nPollo asado","1","12€");
-        insertOfferData("L102","Ración de patatas frita \nSandwich completo","1","6.5€");
+        insertOfferData("L102","Ración de patatas fritas \nSandwich completo","1","6.5€");
 
         insertOfferData("M101","Hamburguesa completa \nPostre a elegir","2","12€");
         insertOfferData("M102","Ración de patatas frita \nPollo asado","2","10€");

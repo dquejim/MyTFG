@@ -22,5 +22,9 @@ public class Local {
     public String getAdress() {
         return adress;
     }
+
+    public void setUbication(String ubication){
+        this.ubication = ubication;
+    }
 }
 
