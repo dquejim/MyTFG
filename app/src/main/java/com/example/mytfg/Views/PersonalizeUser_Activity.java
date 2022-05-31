@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,13 +34,13 @@ public class PersonalizeUser_Activity extends AppCompatActivity {
     EditText textPassword;
     EditText textNumber;
     EditText textAdress;
+    TextView offLineText;
 
     Button buttonConfirm;
     BottomNavigationView bottomNavigationView;
     User myUser;
 
     Utils utils = new Utils();
-    DB_Management db_management = new DB_Management(this);
     SharedPreferences sharedPreferences;
 
     @Override
@@ -49,24 +50,24 @@ public class PersonalizeUser_Activity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
-        myUser = db_management.getUser(utils.getPreferences(sharedPreferences));
+        String userName = (utils.getPreferences(sharedPreferences));
 
         initComponents();
 
-        String user = utils.getPreferences(sharedPreferences);
-        new PersonalizeUser_Activity.getUserTask().execute("GET","/selectUser.php?user=\""+user+"\"");
+        if (utils.comprobarInternet(getBaseContext()) && !userName.equals("Invitado")) {
+            new PersonalizeUser_Activity.getUserTask().execute("GET","/selectUser.php?user=\""+userName+"\"");
+        }
 
         buttonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(PersonalizeUser_Activity.this,Home_Activity.class);
-                if(myUser.getName().equals("Invitado")){
-                    createToast("No puedes modificar un usuario como invitado!",R.drawable.cross,Color.RED);
+                if(!utils.comprobarInternet(getBaseContext()) || userName.equals("Invitado")){
+                    createToast("No puedes modificar un usuario sin conexion!",R.drawable.cross,Color.RED);
                     startActivity(intent);
                 }else{
                     if(!textPassword.getText().equals(myUser.getPassword()) || !textNumber.getText().equals(myUser.getNumber()) || !textAdress.getText().equals(myUser.getAdress())){
-                        db_management.alterUser(textName.getText().toString(), textPassword.getText().toString(), textNumber.getText().toString(), textAdress.getText().toString());
-                        createToast("Usuario modificado correctamente!",R.drawable.tick,Color.GREEN);
+                        new PersonalizeUser_Activity.updateUserTask().execute("GET","/updateUser.php?password=\""+textPassword.getText()+"\"&number=\""+textNumber.getText()+"\"&adress=\""+textAdress.getText()+"\"&name=\""+myUser.getName()+"\"" );
                     }
                     startActivity(intent);
                 }
@@ -94,15 +95,18 @@ public class PersonalizeUser_Activity extends AppCompatActivity {
         textPassword = findViewById(R.id.textPasswordR);
         textNumber = findViewById(R.id.textNumberR);
         textAdress = findViewById(R.id.textAdressR);
+        offLineText = findViewById(R.id.offLineText);
+
         buttonConfirm = findViewById(R.id.button);
 
         bottomNavigationView = findViewById(R.id.menu);
         bottomNavigationView.setSelectedItemId(R.id.user_option);
 
-        if(utils.getPreferences(sharedPreferences).equals("Invitado")){
+        if(!utils.comprobarInternet(getBaseContext())){
             textPassword.setEnabled(false);
             textNumber.setEnabled(false);
             textAdress.setEnabled(false);
+            offLineText.setText("No dispones de conexión en estos momentos");
         }
     }
 
@@ -129,13 +133,14 @@ public class PersonalizeUser_Activity extends AppCompatActivity {
 
     //Metodo para crear la tarea asincrona
     private class getUserTask extends AsyncTask<String, Void, String> {
+        //Declaramos un intent hacia la home_activity
+        Intent intent = new Intent(PersonalizeUser_Activity.this, Home_Activity.class);
         String result;
 
         //Indicamos la funcion de la tarea asincrona, que será hacer peticiones GET a la API
         @Override
         protected String doInBackground(String... strings) {
             result = HttpConnect.getRequest(strings[1]);
-
             try {
                 if (result != null) {
                     JSONArray jsonArr = new JSONArray(result);
@@ -172,4 +177,22 @@ public class PersonalizeUser_Activity extends AppCompatActivity {
             }
         }
     }
-}
+
+    //Metodo para crear la tarea asincrona
+    private class updateUserTask extends AsyncTask<String, Void, String> {
+        String result;
+
+        //Indicamos la funcion de la tarea asincrona, que será hacer peticiones GET a la API
+        @Override
+        protected String doInBackground(String... strings) {
+            result = HttpConnect.getRequest(strings[1]);
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            createToast("Usuario modificado correctamente!",R.drawable.tick,Color.GREEN);
+            }
+        }
+
+    }

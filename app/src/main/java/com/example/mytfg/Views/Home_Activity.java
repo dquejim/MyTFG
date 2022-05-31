@@ -101,10 +101,15 @@ public class Home_Activity extends AppCompatActivity{
         fakeMapsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(utils.comprobarInternet(getBaseContext())) {
-                    _link = Uri.parse(local.getUbicationLink());
-                    Intent i = new Intent(Intent.ACTION_VIEW, _link);
-                    startActivity(i);
+                try{
+                    if(utils.comprobarInternet(getBaseContext()) || !local.getUbicationLink().equals(null)) {
+                        _link = Uri.parse(local.getUbicationLink());
+                        System.out.println(_link);
+                        Intent i = new Intent(Intent.ACTION_VIEW, _link);
+                        startActivity(i);
+                    }
+                }catch (NullPointerException e){
+                    e.printStackTrace();
                 }
             }
         });

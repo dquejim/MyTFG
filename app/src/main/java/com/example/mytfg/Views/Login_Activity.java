@@ -66,7 +66,7 @@ public class Login_Activity extends AppCompatActivity {
         bRegister.setOnHoverListener(new View.OnHoverListener() {
             @Override
             public boolean onHover(View view, MotionEvent motionEvent) {
-                bRegister.getPaint (). setFlags (Paint.STRIKE_THRU_TEXT_FLAG);
+                bRegister.getPaint().setFlags (Paint.UNDERLINE_TEXT_FLAG);
                 return false;
             }
         });
