@@ -162,7 +162,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.196"
-                app:srcCompat="@drawable/user_icon" />
+                app:srcCompat="@drawable/user_ico" />
 
             <ImageView
                 android:id="@+id/imageView3"
@@ -174,7 +174,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.33"
-                app:srcCompat="@drawable/eye_icon" />
+                app:srcCompat="@drawable/password_ico" />
 
             <ImageView
                 android:id="@+id/imageView4"
@@ -186,7 +186,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.474"
-                app:srcCompat="@drawable/phone_icon" />
+                app:srcCompat="@drawable/phone_ico" />
 
             <ImageView
                 android:id="@+id/imageView6"
@@ -198,7 +198,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.616"
-                app:srcCompat="@drawable/address" />
+                app:srcCompat="@drawable/adress_ico" />
 
             <TextView
                 android:id="@+id/offLineText"

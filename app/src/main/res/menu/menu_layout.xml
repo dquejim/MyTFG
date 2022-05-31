@@ -15,7 +15,7 @@
         app:showAsAction="ifRoom|withText" />
     <item
         android:id="@+id/user_option"
-        android:icon="@drawable/user_icon"
+        android:icon="@drawable/user_ico"
         android:title="Perfil"
         app:showAsAction="ifRoom|withText" />
 
