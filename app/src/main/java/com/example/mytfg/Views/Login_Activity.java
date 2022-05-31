@@ -5,7 +5,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,8 +18,16 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mytfg.Control.DB_Management;
+import com.example.mytfg.Control.HttpConnect;
 import com.example.mytfg.Control.Utils;
+import com.example.mytfg.Models.Local;
+import com.example.mytfg.Models.Offer;
+import com.example.mytfg.Models.User;
 import com.example.mytfg.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import io.github.muddz.styleabletoast.StyleableToast;
 
@@ -29,6 +41,8 @@ public class Login_Activity extends AppCompatActivity {
     DB_Management db_management = new DB_Management(this);
     SharedPreferences sharedPreferences;
     Utils utils = new Utils();
+    User myUser;
+    User searchedUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +52,7 @@ public class Login_Activity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         sharedPreferences = getSharedPreferences("user",MODE_PRIVATE);
+
         initComponents();
 
         //Accion al pulsar el botón de registrarse de la pantalla de login
@@ -45,6 +60,14 @@ public class Login_Activity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 loadRegisterButton();
+            }
+        });
+
+        bRegister.setOnHoverListener(new View.OnHoverListener() {
+            @Override
+            public boolean onHover(View view, MotionEvent motionEvent) {
+                bRegister.getPaint (). setFlags (Paint.STRIKE_THRU_TEXT_FLAG);
+                return false;
             }
         });
 
@@ -101,35 +124,19 @@ public class Login_Activity extends AppCompatActivity {
 
 
     private void loadLoginButton(){
-        //Declaramos un intent hacia la home_activity
-        Intent intent = new Intent(Login_Activity.this, Home_Activity.class);
-
         //Si disponemos de internet obtenemos el usuario y contraseña introducidos
         if(utils.comprobarInternet(getBaseContext())){
             if(!textName.getText().toString().isEmpty() && !textPassword.getText().toString().isEmpty()) {
                 String user = textName.getText().toString();
                 String password = textPassword.getText().toString();
+                searchedUser = new User(user,password,"","");
 
-                //Comprobamos si la contraseña pertenece al usuario con la opcion 1 del método checkUser
-                if (db_management.checkUser(user, password, 1) != null) {
+                new Login_Activity.getUserTask().execute("GET","/selectUser.php?user=\""+user+"\"");
 
-                    //Lanzamos un toast de login correcto
-                    createToast("Login correcto!",R.drawable.tick,Color.GREEN);
-
-                    //Iniciamos el intent pasandole el nombre de usuario
-                    utils.setPreferences(user,sharedPreferences);
-                    startActivity(intent);
-
-                    //Si no coindide la contraseña con el usuario, nos lanza un toast de error
-                } else {
-                    createToast("Usuario o contraseña incorrectos.",R.drawable.cross,Color.RED);
-                }
-            }else{
-                createToast("Usuario o contraseña incorrectos.",R.drawable.cross,Color.RED);
+                //Si no hay conexion a Internet, nos pregunta si queremos conectarnos como usuario
             }
-
-            //Si no hay conexion a Internet, nos pregunta si queremos conectarnos como usuario
         }else{
+            Intent intent = new Intent(Login_Activity.this, Home_Activity.class);
             createAlertDialog("Parece que está sin conexión, ¿desea acceder como invitado?",intent);
         }
     }
@@ -142,7 +149,67 @@ public class Login_Activity extends AppCompatActivity {
             //Si no, nos pregunta si queremos entrar como invitado
         }else{
             Intent intent = new Intent(Login_Activity.this, Home_Activity.class);
-            createAlertDialog("Parece que está sin conexión, ¿desea acceder como invitado?",intent);
+            createAlertDialog("Parece que está sin conexión, ¿desea acceder como invitado? ",intent);
+        }
+    }
+
+    //Metodo para crear la tarea asincrona
+    private class getUserTask extends AsyncTask<String, Void, String> {
+        String result;
+
+        //Indicamos la funcion de la tarea asincrona, que será hacer peticiones GET a la API
+        @Override
+        protected String doInBackground(String... strings) {
+            result = HttpConnect.getRequest(strings[1]);
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            //Declaramos un intent hacia la home_activity
+            Intent intent = new Intent(Login_Activity.this, Home_Activity.class);
+
+            try {
+                if (s != null) {
+                    JSONArray jsonArr = new JSONArray(s);
+
+                    for (int i = 0; i < jsonArr.length(); i++) {
+                        JSONObject jsonObject = jsonArr.getJSONObject(i);
+
+                        //Obtenemos los datos de interes de nuestro objeto JSON
+                        String user = jsonObject.getString("user");
+                        String password = jsonObject.getString("password");
+                        String number = jsonObject.getString("number");
+                        String adress = jsonObject.getString("adress");
+
+                        //Cargamos los datos del local a nuestro objeto
+                        myUser = new User(user, password, number, adress);
+                    }
+
+                    if(!s.equals("[]")) {
+                        if (searchedUser.getName().equals(myUser.getName()) && searchedUser.getPassword().equals(myUser.getPassword())) {
+                            //Lanzamos un toast de login correcto
+                            createToast("Login correcto!", R.drawable.tick, Color.GREEN);
+
+                            //Iniciamos el intent pasandole el nombre de usuario
+                            utils.setPreferences(myUser.getName(), sharedPreferences);
+                            startActivity(intent);
+
+                        } else {
+                            createToast("Usuario o contraseña incorrectos.", R.drawable.cross, Color.RED);
+                        }
+                    }else{
+                        createToast("Usuario o contraseña incorrectos.", R.drawable.cross, Color.RED);
+                    }
+
+                    //Si no hay conexion a Internet, nos pregunta si queremos conectarnos como usuario
+                }else{
+                    createAlertDialog("Parece que está sin conexión, ¿desea acceder como invitado? uwu",intent);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 

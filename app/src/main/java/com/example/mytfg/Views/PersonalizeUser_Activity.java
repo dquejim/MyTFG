@@ -3,6 +3,7 @@ package com.example.mytfg.Views;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,11 +14,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.mytfg.Control.DB_Management;
+import com.example.mytfg.Control.HttpConnect;
 import com.example.mytfg.Control.Utils;
 import com.example.mytfg.R;
 import com.example.mytfg.Models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import io.github.muddz.styleabletoast.StyleableToast;
 
@@ -30,7 +36,7 @@ public class PersonalizeUser_Activity extends AppCompatActivity {
 
     Button buttonConfirm;
     BottomNavigationView bottomNavigationView;
-    User user;
+    User myUser;
 
     Utils utils = new Utils();
     DB_Management db_management = new DB_Management(this);
@@ -43,19 +49,22 @@ public class PersonalizeUser_Activity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
-        user = db_management.getUser(utils.getPreferences(sharedPreferences));
+        myUser = db_management.getUser(utils.getPreferences(sharedPreferences));
 
         initComponents();
+
+        String user = utils.getPreferences(sharedPreferences);
+        new PersonalizeUser_Activity.getUserTask().execute("GET","/selectUser.php?user=\""+user+"\"");
 
         buttonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(PersonalizeUser_Activity.this,Home_Activity.class);
-                if(user.getName().equals("Invitado")){
+                if(myUser.getName().equals("Invitado")){
                     createToast("No puedes modificar un usuario como invitado!",R.drawable.cross,Color.RED);
                     startActivity(intent);
                 }else{
-                    if(!textPassword.getText().equals(user.getPassword()) || !textNumber.getText().equals(user.getNumber()) || !textAdress.getText().equals(user.getAdress())){
+                    if(!textPassword.getText().equals(myUser.getPassword()) || !textNumber.getText().equals(myUser.getNumber()) || !textAdress.getText().equals(myUser.getAdress())){
                         db_management.alterUser(textName.getText().toString(), textPassword.getText().toString(), textNumber.getText().toString(), textAdress.getText().toString());
                         createToast("Usuario modificado correctamente!",R.drawable.tick,Color.GREEN);
                     }
@@ -80,22 +89,17 @@ public class PersonalizeUser_Activity extends AppCompatActivity {
     }
 
     private void initComponents(){
-        textName = findViewById(R.id.textNameR2);
+        textName = findViewById(R.id.textNameR);
         textName.setEnabled(false);
-        textPassword = findViewById(R.id.textPasswordR2);
-        textNumber = findViewById(R.id.textNumberR2);
-        textAdress = findViewById(R.id.textAdressR2);
-        buttonConfirm = findViewById(R.id.buttonConfirm);
-
-        textName.setText("  "+user.getName());
-        textPassword.setText(user.getPassword());
-        textNumber.setText("  "+user.getNumber());
-        textAdress.setText("  "+user.getAdress());
+        textPassword = findViewById(R.id.textPasswordR);
+        textNumber = findViewById(R.id.textNumberR);
+        textAdress = findViewById(R.id.textAdressR);
+        buttonConfirm = findViewById(R.id.button);
 
         bottomNavigationView = findViewById(R.id.menu);
         bottomNavigationView.setSelectedItemId(R.id.user_option);
 
-        if(user.getName().equals("Invitado")){
+        if(utils.getPreferences(sharedPreferences).equals("Invitado")){
             textPassword.setEnabled(false);
             textNumber.setEnabled(false);
             textAdress.setEnabled(false);
@@ -121,5 +125,51 @@ public class PersonalizeUser_Activity extends AppCompatActivity {
 
         startActivity(intent);
         overridePendingTransition(0,0);
+    }
+
+    //Metodo para crear la tarea asincrona
+    private class getUserTask extends AsyncTask<String, Void, String> {
+        String result;
+
+        //Indicamos la funcion de la tarea asincrona, que será hacer peticiones GET a la API
+        @Override
+        protected String doInBackground(String... strings) {
+            result = HttpConnect.getRequest(strings[1]);
+
+            try {
+                if (result != null) {
+                    JSONArray jsonArr = new JSONArray(result);
+
+                    for (int i = 0; i < jsonArr.length(); i++) {
+                        JSONObject jsonObject = jsonArr.getJSONObject(i);
+
+                        //Obtenemos los datos de interes de nuestro objeto JSON
+                        String user = jsonObject.getString("user");
+                        String password = jsonObject.getString("password");
+                        String number = jsonObject.getString("number");
+                        String adress = jsonObject.getString("adress");
+
+                        //Cargamos los datos del local a nuestro objeto
+                        myUser = new User(user, password, number, adress);
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            //Declaramos un intent hacia la home_activity
+            Intent intent = new Intent(PersonalizeUser_Activity.this, Home_Activity.class);
+            if(utils.comprobarInternet(getBaseContext())){
+                textName.setText(myUser.getName());
+                textAdress.setText(myUser.getAdress());
+                textPassword.setText(myUser.getPassword());
+                textNumber.setText(myUser.getNumber());
+            }
+        }
     }
 }

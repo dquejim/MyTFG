@@ -33,7 +33,6 @@
             android:layout_height="match_parent"
             android:fontFamily="@font/abel"
             android:gravity="center"
-            android:text="TextView"
             android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="20sp" />
@@ -43,7 +42,6 @@
             android:layout_width="55dp"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="TextView"
             android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="16sp" />
@@ -135,7 +133,6 @@
             android:layout_height="match_parent"
             android:fontFamily="@font/abel"
             android:gravity="center"
-            android:text="TextView"
             android:textAlignment="center"
             android:textColor="#000000"
             android:textSize="20sp"
@@ -153,7 +150,6 @@
             android:layout_width="58dp"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="TextView"
             android:textAlignment="center"
             android:textColor="#151515"
             android:textSize="16sp" />

@@ -28,6 +28,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -35,16 +36,17 @@ import java.util.List;
 public class Home_Activity extends AppCompatActivity{
 
     DB_Management db_management = new DB_Management(this);
-    List<Offer> offerList = new ArrayList<>();
+    ArrayList<Offer> offerList = new ArrayList<>();
     SharedPreferences sharedPreferences;
     Calendar c = Calendar.getInstance();
     Utils utils = new Utils();
 
-    User user;
-    Offer firstOffer;
-    Offer secondOffer;
+    Offer firstOffer = null;
+    Offer secondOffer = null;
     Uri _link;
     Local local = null;
+    String now;
+    String userName;
 
     ImageButton exitButton;
     ImageButton fakeMapsView;
@@ -64,13 +66,29 @@ public class Home_Activity extends AppCompatActivity{
         setContentView(R.layout.home_activity);
         getSupportActionBar().hide();
 
-        sharedPreferences  = getSharedPreferences("user", MODE_PRIVATE);
-        user = db_management.getUser(utils.getPreferences(sharedPreferences));
+        now = String.valueOf(c.get(Calendar.DAY_OF_WEEK));
+        now = dayChanger(now);
 
-        new getOfferTask().execute("GET","/selectOffer.php");
-        new getLocalTask().execute("GET","/selectLocal.php");
+        sharedPreferences  = getSharedPreferences("user", MODE_PRIVATE);
+        userName = utils.getPreferences(sharedPreferences);
 
         initComponents();
+
+        if(utils.comprobarInternet(this)){
+            new getOfferTask().execute("GET","/selectOffer.php?week_day=\""+now+"\"");
+            new getLocalTask().execute("GET","/selectLocal.php");
+        }else{
+            offerList.add(db_management.getOffers(now).get(0));
+            offerList.add(db_management.getOffers(now).get(1));
+
+            firstOffer = offerList.get(0);
+            secondOffer = offerList.get(1);
+
+            firstOfferDesc.setText(firstOffer.getName());
+            firstOfferPrice.setText(firstOffer.getPrice());
+            secondOfferDesc.setText(secondOffer.getName());
+            secondOfferPrice.setText(secondOffer.getPrice());
+        }
 
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,7 +129,7 @@ public class Home_Activity extends AppCompatActivity{
         bottomNavigationView.setSelectedItemId(R.id.home_option);
 
         userNameView = findViewById(R.id.userNameView);
-        userNameView.setText("Bienvenido " + user.getName()+ "!");
+        userNameView.setText("Bienvenido " + userName + "!");
         exitButton = findViewById(R.id.exitButton);
         optionalImageView = findViewById(R.id.optionalImageView);
         fakeMapsView = findViewById(R.id.fakeMapView);
@@ -130,13 +148,12 @@ public class Home_Activity extends AppCompatActivity{
 
         @Override
         protected void onPostExecute(String s) {
-
             try {
                 if (s != null) {
                     JSONArray jsonArr = new JSONArray(s);
 
-                    for (int i = 0; i < jsonArr.length(); i++)
-                    {
+                    for (int i = 0; i < jsonArr.length(); i++){
+
                         JSONObject jsonObject = jsonArr.getJSONObject(i);
 
                         //Obtenemos los datos de interes de nuestro objeto JSON
@@ -149,13 +166,14 @@ public class Home_Activity extends AppCompatActivity{
                         Offer offer = new Offer(id, name, week_day, price);
                         offerList.add(offer);
                     }
-                }
 
+                    loadOffer(offerList);
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
-            loadOffer();
+
         }
     }
 
@@ -181,13 +199,12 @@ public class Home_Activity extends AppCompatActivity{
                         JSONObject jsonObject = jsonArr.getJSONObject(i);
 
                         //Obtenemos los datos de interes de nuestro objeto JSON
-                        String id = jsonObject.getString("id");
-                        String ubication = jsonObject.getString("ubication");
-                        String adress = jsonObject.getString("adress");
+                        String id = jsonObject.getString("Id");
+                        String ubication = jsonObject.getString("Ubication");
+                        String adress = jsonObject.getString("Adress");
 
                         //Cargamos los datos del local a nuestro objeto
                         local = new Local(id, ubication, adress);
-                        System.out.println(local.getUbicationLink());
                     }
                 }
 
@@ -218,26 +235,29 @@ public class Home_Activity extends AppCompatActivity{
         overridePendingTransition(0,0);
     }
 
-    private void loadOffer(){
-        String dayOfTheWeek = String.valueOf(c.get(Calendar.DAY_OF_WEEK));
+    private void loadOffer(ArrayList<Offer> myList){
+        offerList = myList;
 
-        if(utils.comprobarInternet(this)){
-            for(int i = 0;i <offerList.size();i++){
-                if(offerList.get(i).getDay().equals(dayOfTheWeek)){
-                    firstOffer = offerList.get(i);
-                    secondOffer = offerList.get(i+1);
-                }
-            }
-
-        }else{
-            firstOffer = db_management.getOffers(dayOfTheWeek).get(0);
-            secondOffer = db_management.getOffers(dayOfTheWeek).get(1);
-        }
+        firstOffer = offerList.get(0);
+        secondOffer = offerList.get(1);
 
         firstOfferDesc.setText(firstOffer.getName());
         firstOfferPrice.setText(firstOffer.getPrice());
         secondOfferDesc.setText(secondOffer.getName());
         secondOfferPrice.setText(secondOffer.getPrice());
     }
+
+    private String dayChanger(String old_day){
+        String new_day = "0";
+
+        if(old_day.equals("1")){
+            new_day = "7";
+        }else{
+            new_day = String.valueOf(Integer.parseInt(old_day) - 1);
+        }
+
+        return new_day;
+    }
 }
+
 
