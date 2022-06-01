@@ -58,10 +58,10 @@
         app:layout_constraintGuide_percent="0.5" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/card_View1"
+        android:id="@+id/sandwichButton"
         android:layout_width="125dp"
         android:layout_height="125dp"
-        app:cardBackgroundColor="#7AA144"
+        app:cardBackgroundColor="#A1444F"
         app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
@@ -79,10 +79,10 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/card_View3"
+        android:id="@+id/campButton"
         android:layout_width="125dp"
         android:layout_height="125dp"
-        app:cardBackgroundColor="#3F7683"
+        app:cardBackgroundColor="#DBE37A"
         app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
@@ -101,10 +101,10 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/crad_View5"
+        android:id="@+id/potatoeButton"
         android:layout_width="125dp"
         android:layout_height="125dp"
-        app:cardBackgroundColor="#7AA144"
+        app:cardBackgroundColor="#A1444F"
         app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline9"
         app:layout_constraintEnd_toStartOf="@+id/guideline5"
@@ -124,10 +124,10 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/card_View2"
+        android:id="@+id/pizzaButton"
         android:layout_width="125dp"
         android:layout_height="125dp"
-        app:cardBackgroundColor="#3F7683"
+        app:cardBackgroundColor="#DBE37A"
         app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toEndOf="parent"
@@ -145,10 +145,10 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/card_View6"
+        android:id="@+id/breadButton"
         android:layout_width="125dp"
         android:layout_height="125dp"
-        app:cardBackgroundColor="#3F7683"
+        app:cardBackgroundColor="#DBE37A"
         app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline9"
         app:layout_constraintEnd_toEndOf="parent"
@@ -167,10 +167,10 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/card_View4"
+        android:id="@+id/burguerButton"
         android:layout_width="125dp"
         android:layout_height="125dp"
-        app:cardBackgroundColor="#7AA144"
+        app:cardBackgroundColor="#A1444F"
         app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline4"
         app:layout_constraintEnd_toEndOf="parent"
@@ -192,17 +192,19 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/foodCardView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="475dp"
         app:cardCornerRadius="20dp"
         app:layout_constraintBottom_toTopOf="@+id/menu"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.422">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/myRecycerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
         </androidx.recyclerview.widget.RecyclerView>
 

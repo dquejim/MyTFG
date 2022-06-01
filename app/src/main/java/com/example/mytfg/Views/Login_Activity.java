@@ -119,6 +119,7 @@ public class Login_Activity extends AppCompatActivity {
             //Insertamos en la base de datos el usuario al que nos conectaremos cuando no haya conexión
             db_management.insertUser("Invitado", "1234213453", "Default", "Default");
             db_management.insertLocalData("01","https://goo.gl/maps/5MdAZttVLEe5jzr5A","Calle Almuñecar nº6");
+            db_management.insertAllMenu();
         }
     }
 

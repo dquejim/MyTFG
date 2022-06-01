@@ -20,7 +20,7 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/card_View3"
+        android:id="@+id/campButton"
         android:layout_width="333dp"
         android:layout_height="504dp"
         android:background="@color/black"

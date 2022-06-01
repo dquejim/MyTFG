@@ -12,8 +12,10 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mytfg.Control.DB_Management;
 import com.example.mytfg.Control.HttpConnect;
 import com.example.mytfg.Control.RecyclerAdapter;
+import com.example.mytfg.Control.Utils;
 import com.example.mytfg.Models.Food;
 import com.example.mytfg.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -35,10 +37,13 @@ public class Food_Activity extends AppCompatActivity {
     CardView camp_option;
     CardView burguer_option;
     CardView potato_option;
+    CardView bread_option;
     
     RecyclerView recyclerView;
     RecyclerAdapter recAdapter;
     ArrayList<Food> foodList = new ArrayList<>();
+    Utils utils = new Utils();
+    DB_Management db_management = new DB_Management(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,46 +64,44 @@ public class Food_Activity extends AppCompatActivity {
         sandwich_option.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new Food_Activity.getFoodTask().execute("GET","/selectFood.php?category=\"Sandwiches\"");
-                foodCardView.setVisibility(View.VISIBLE);
+                loadMenuOptions("Sandwiches");
             }
         });
 
         pizza_option.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new Food_Activity.getFoodTask().execute("GET","/selectFood.php?category=\"Pizzas\"");
-                foodCardView.setVisibility(View.VISIBLE);
+                loadMenuOptions("Pizzas");
             }
         });
 
         camp_option.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new Food_Activity.getFoodTask().execute("GET","/selectFood.php?category=\"Camperos\"");
-                foodCardView.setVisibility(View.VISIBLE);
+                loadMenuOptions("Camperos");
             }
         });
         
         burguer_option.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new Food_Activity.getFoodTask().execute("GET","/selectFood.php?category=\"Hamburguesas\"");
-                foodCardView.setVisibility(View.VISIBLE);
+                loadMenuOptions("Hamburguesas");
             }
         });
 
         potato_option.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new Food_Activity.getFoodTask().execute("GET","/selectFood.php?category=\"Patatas\"");
-                foodCardView.setVisibility(View.VISIBLE);
+                loadMenuOptions("Patatas");
             }
         });
-        
-        
 
-
+        bread_option.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loadMenuOptions("Bocadillos");
+            }
+        });
     }
 
     private void initComponents(){
@@ -106,15 +109,14 @@ public class Food_Activity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.food_option);
         foodCardView = findViewById(R.id.foodCardView);
 
-        sandwich_option = findViewById(R.id.card_View1);
-        pizza_option = findViewById(R.id.card_View2);
-        camp_option = findViewById(R.id.card_View3);
-        burguer_option = findViewById(R.id.card_View4);
-        potato_option = findViewById(R.id.crad_View5);
+        sandwich_option = findViewById(R.id.sandwichButton);
+        pizza_option = findViewById(R.id.pizzaButton);
+        camp_option = findViewById(R.id.campButton);
+        burguer_option = findViewById(R.id.burguerButton);
+        potato_option = findViewById(R.id.potatoeButton);
+        bread_option = findViewById(R.id.breadButton);
 
         recyclerView = (RecyclerView) findViewById(R.id.myRecycerView);
-        foodCardView.setVisibility(View.GONE);
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
 
         //Le indicamos el adaptador a usar, así como su layout
@@ -145,7 +147,7 @@ public class Food_Activity extends AppCompatActivity {
     }
 
     //Metodo para crear la tarea asincrona
-    private class getFoodTask extends AsyncTask<String, Void, String> {
+    private class getOnlineMenu extends AsyncTask<String, Void, String> {
         String result;
 
         //Indicamos la funcion de la tarea asincrona, que será hacer peticiones GET a la API
@@ -157,7 +159,6 @@ public class Food_Activity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            ArrayList<Food> myFoodList = new ArrayList<>();
             try {
                 if (s != null) {
                     JSONArray jsonArr = new JSONArray(s);
@@ -175,11 +176,41 @@ public class Food_Activity extends AppCompatActivity {
                         //Creamos un objeto comida y lo añadimos a la lista
                         foodList.add(new Food(id, name, week_day, price));
                         recAdapter.notifyDataSetChanged();
+                        foodCardView.setVisibility(View.VISIBLE);
                     }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    //Metodo para crear la tarea asincrona
+    private class getOffLineMenu extends AsyncTask<String, Void, String> {
+        String result = "";
+
+        //Indicamos la funcion de la tarea asincrona, que será hacer peticiones GET a la API
+        @Override
+        protected String doInBackground(String... strings) {
+            foodList = (ArrayList<Food>) db_management.getProducts(strings[0]);
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            recAdapter.notifyDataSetChanged();
+            foodCardView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void loadMenuOptions(String menu_option){
+
+        if(utils.comprobarInternet(getBaseContext())) {
+            new getOnlineMenu().execute("GET", "/selectFood.php?category=\"" + menu_option + "\"");
+        }else{
+            foodCardView.setVisibility(View.VISIBLE);
+            new getOffLineMenu().execute(menu_option);
+        }
+
     }
 }

@@ -24,7 +24,7 @@
             android:id="@+id/imageView7"
             android:layout_width="56dp"
             android:layout_height="match_parent"
-            android:background="#3F7683"
+            android:background="#58DFFF"
             app:srcCompat="@android:color/transparent" />
 
         <TextView
@@ -142,7 +142,7 @@
             android:id="@+id/imageView5"
             android:layout_width="56dp"
             android:layout_height="match_parent"
-            android:background="#7AA144"
+            android:background="#94FF00"
             app:srcCompat="@android:color/transparent" />
 
         <TextView

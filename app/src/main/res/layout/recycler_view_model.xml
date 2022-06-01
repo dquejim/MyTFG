@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="#000000">
+    android:background="#4A4949">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView3"
@@ -19,18 +19,18 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:cardBackgroundColor="#4A4949">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#000000">
+                android:layout_height="match_parent">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardView4"
                     android:layout_width="100dp"
                     android:layout_height="72dp"
-                    app:cardBackgroundColor="#C6A0A0"
+                    app:cardBackgroundColor="#C8BFBF"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/txtFoodProduct"
                     app:layout_constraintHorizontal_bias="0.0"
