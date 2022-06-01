@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/backgroud">
+    android:background="@drawable/background2">
 
     <androidx.cardview.widget.CardView
         android:layout_width="325dp"
@@ -20,7 +20,7 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView3"
+        android:id="@+id/card_View3"
         android:layout_width="333dp"
         android:layout_height="504dp"
         android:background="@color/black"
@@ -34,7 +34,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/backgroud">
+            android:background="@drawable/background2">
 
             <EditText
                 android:id="@+id/textNameR"

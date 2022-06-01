@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
 
 import com.example.mytfg.Models.Offer;
 
@@ -51,5 +53,6 @@ public class Utils {
         String user = sharedPreferences.getString("user", "Invitado");
         return user;
     }
+
 
 }
