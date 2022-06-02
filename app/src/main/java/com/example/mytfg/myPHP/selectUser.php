@@ -10,7 +10,7 @@ $search_user = $_GET['user'];
 $conexion = mysqli_connect($server,$user,$pass,$bd)
 or die("Ha sucedido un error inexperado en la conexion de la base de datos");
 
-$sql = "SELECT * FROM tableLogin WHERE user =" . $search_user ;
+$sql = "SELECT * FROM tableLogin WHERE user LIKE " . $search_user ;
 mysqli_set_charset($conexion, "utf8");
 if(!$result = mysqli_query($conexion, $sql)) die();
 

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -29,11 +30,8 @@ public class NewAccount_Activity extends AppCompatActivity {
 
     //Declaracion de variables
     Button bRegister;
-    EditText textNameR;
-    EditText textPasswordR;
-    EditText textNumberR;
-    EditText textAdressR;
-
+    EditText textNameR,textPasswordR,textNumberR,textAdressR;
+    TextView txtUsersNumber;
     User myUser;
 
     DB_Management db_management = new DB_Management(this);
@@ -51,6 +49,8 @@ public class NewAccount_Activity extends AppCompatActivity {
 
         initComponents();
 
+        new NewAccount_Activity.getUsersNumber().execute("GET","/selectUser.php?user=\"%%\"");
+
         //Añadimos una accion al pulsar el boton para registrarse
         bRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +67,7 @@ public class NewAccount_Activity extends AppCompatActivity {
         textPasswordR = (EditText) findViewById(R.id.textPasswordR);
         textNumberR = (EditText) findViewById(R.id.textNumberR);
         textAdressR = (EditText) findViewById(R.id.textAdressR);
+        txtUsersNumber = findViewById(R.id.txtUsersNumber);
     }
 
     private void loadLoginButton(){
@@ -160,6 +161,36 @@ public class NewAccount_Activity extends AppCompatActivity {
             }else{
                 createToast("El usuario ya existe!", R.drawable.cross, Color.RED);
             }
+        }
+    }
+
+    //Metodo para crear la tarea asincrona
+    private class getUsersNumber extends AsyncTask<String, Void, String> {
+        String result;
+        int usersNumber = 0;
+
+        //Indicamos la funcion de la tarea asincrona, que será hacer peticiones GET a la API
+        @Override
+        protected String doInBackground(String... strings) {
+            result = HttpConnect.getRequest(strings[1]);
+            try {
+                if (result != null) {
+                    JSONArray jsonArr = new JSONArray(result);
+
+                    for (int i = 0; i < jsonArr.length(); i++) {
+                        usersNumber++;
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            txtUsersNumber.setText("   Ya hay registrados "+usersNumber+" usuarios!   ");
         }
     }
 
