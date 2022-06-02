@@ -1,14 +1,20 @@
 package com.example.mytfg.Views;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.TranslateAnimation;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,17 +36,15 @@ import java.util.ArrayList;
 public class Food_Activity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
-    
-    CardView foodCardView;
-    CardView sandwich_option;
-    CardView pizza_option;
-    CardView camp_option;
-    CardView burguer_option;
-    CardView potato_option;
-    CardView bread_option;
+
+    CardView sandwich_option,pizza_option,camp_option,burguer_option,potato_option,bread_option;
     
     RecyclerView recyclerView;
     RecyclerAdapter recAdapter;
+
+    LinearLayoutManager layoutManager;
+    ConstraintLayout presentationLayout;
+
     ArrayList<Food> foodList = new ArrayList<>();
     Utils utils = new Utils();
     DB_Management db_management = new DB_Management(this);
@@ -107,7 +111,6 @@ public class Food_Activity extends AppCompatActivity {
     private void initComponents(){
         bottomNavigationView = findViewById(R.id.menu);
         bottomNavigationView.setSelectedItemId(R.id.food_option);
-        foodCardView = findViewById(R.id.foodCardView);
 
         sandwich_option = findViewById(R.id.sandwichButton);
         pizza_option = findViewById(R.id.pizzaButton);
@@ -116,8 +119,9 @@ public class Food_Activity extends AppCompatActivity {
         potato_option = findViewById(R.id.potatoeButton);
         bread_option = findViewById(R.id.breadButton);
 
-        recyclerView = (RecyclerView) findViewById(R.id.myRecycerView);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView = (RecyclerView) findViewById(R.id.myRecyclerView);
+        layoutManager = new LinearLayoutManager(this);
+        presentationLayout = findViewById(R.id.presentationLayout);
 
         //Le indicamos el adaptador a usar, así como su layout
         recAdapter = new RecyclerAdapter(foodList);
@@ -154,14 +158,10 @@ public class Food_Activity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
             result = HttpConnect.getRequest(strings[1]);
-            return result;
-        }
 
-        @Override
-        protected void onPostExecute(String s) {
             try {
-                if (s != null) {
-                    JSONArray jsonArr = new JSONArray(s);
+                if (result != null) {
+                    JSONArray jsonArr = new JSONArray(result);
 
                     for (int i = 0; i < jsonArr.length(); i++){
 
@@ -175,13 +175,18 @@ public class Food_Activity extends AppCompatActivity {
 
                         //Creamos un objeto comida y lo añadimos a la lista
                         foodList.add(new Food(id, name, week_day, price));
-                        recAdapter.notifyDataSetChanged();
-                        foodCardView.setVisibility(View.VISIBLE);
                     }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            recAdapter.notifyDataSetChanged();
         }
     }
 
@@ -198,19 +203,22 @@ public class Food_Activity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
+            recAdapter = new RecyclerAdapter(foodList);
+            recyclerView.setAdapter(recAdapter);
+            recyclerView.setLayoutManager(layoutManager);
             recAdapter.notifyDataSetChanged();
-            foodCardView.setVisibility(View.VISIBLE);
         }
     }
 
     private void loadMenuOptions(String menu_option){
+        foodList.clear();
+        presentationLayout.setVisibility(View.GONE);
 
         if(utils.comprobarInternet(getBaseContext())) {
             new getOnlineMenu().execute("GET", "/selectFood.php?category=\"" + menu_option + "\"");
         }else{
-            foodCardView.setVisibility(View.VISIBLE);
             new getOffLineMenu().execute(menu_option);
         }
-
     }
+
 }

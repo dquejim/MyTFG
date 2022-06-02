@@ -43,20 +43,13 @@ public class Home_Activity extends AppCompatActivity{
 
     Offer firstOffer = null;
     Offer secondOffer = null;
-    Uri _link;
     Local local = null;
     String now;
     String userName;
 
-    ImageButton exitButton;
-    ImageButton fakeMapsView;
-    ImageView optionalImageView;
+    ImageButton exitButton,facebook_button,instagram_button,maps_button;
 
-    TextView userNameView;
-    TextView firstOfferDesc;
-    TextView secondOfferDesc;
-    TextView firstOfferPrice;
-    TextView secondOfferPrice;
+    TextView userNameView,firstOfferDesc,secondOfferDesc,firstOfferPrice,secondOfferPrice,txtLocalNumber;
 
     BottomNavigationView bottomNavigationView;
 
@@ -67,52 +60,55 @@ public class Home_Activity extends AppCompatActivity{
         getSupportActionBar().hide();
 
         now = String.valueOf(c.get(Calendar.DAY_OF_WEEK));
-        now = dayChanger(now);
+        now = utils.dayChanger(now);
 
         sharedPreferences  = getSharedPreferences("user", MODE_PRIVATE);
         userName = utils.getPreferences(sharedPreferences);
 
         initComponents();
 
-        if(utils.comprobarInternet(this)){
-            new getOfferTask().execute("GET","/selectOffer.php?week_day=\""+now+"\"");
-            new getLocalTask().execute("GET","/selectLocal.php");
-        }else{
-            offerList.add(db_management.getOffers(now).get(0));
-            offerList.add(db_management.getOffers(now).get(1));
+        loadData();
 
-            firstOffer = offerList.get(0);
-            secondOffer = offerList.get(1);
-
-            firstOfferDesc.setText(firstOffer.getName());
-            firstOfferPrice.setText(firstOffer.getPrice());
-            secondOfferDesc.setText(secondOffer.getName());
-            secondOfferPrice.setText(secondOffer.getPrice());
-        }
-
-        exitButton.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener listener = new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(Home_Activity.this,Login_Activity.class);
-                startActivity(intent);
-            }
-        });
+            public void onClick(View v)
+            {
+                switch (v.getId())
+                {
+                    case R.id.exitButton:
+                        Intent intent = new Intent(Home_Activity.this,Login_Activity.class);
+                        startActivity(intent);
+                        break;
 
-        fakeMapsView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try{
-                    if(utils.comprobarInternet(getBaseContext()) || !local.getUbicationLink().equals(null)) {
-                        _link = Uri.parse(local.getUbicationLink());
-                        System.out.println(_link);
-                        Intent i = new Intent(Intent.ACTION_VIEW, _link);
-                        startActivity(i);
-                    }
-                }catch (NullPointerException e){
-                    e.printStackTrace();
+                    case R.id.instagram_button:
+                        navigateTo(local.getInstagram_link());
+                        break;
+
+                    case R.id.facebook_button:
+                        navigateTo(local.getFacebook_link());
+                        break;
+
+                    case R.id.maps_button:
+                        navigateTo(local.getUbicationLink());
+                        break;
+
+                    case R.id.txtLocalPhone:
+                        navigateTo(local.getNumber());
+                        break;
+
+                    default:
+                        break;
                 }
+
             }
-        });
+        };
+
+        exitButton.setOnClickListener(listener);
+        instagram_button.setOnClickListener(listener);
+        facebook_button.setOnClickListener(listener);
+        maps_button.setOnClickListener(listener);
+        txtLocalNumber.setOnClickListener(listener);
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -134,10 +130,14 @@ public class Home_Activity extends AppCompatActivity{
         bottomNavigationView.setSelectedItemId(R.id.home_option);
 
         userNameView = findViewById(R.id.userNameView);
-        userNameView.setText("Bienvenido " + userName + "!");
+        txtLocalNumber = findViewById(R.id.txtLocalPhone);
+
         exitButton = findViewById(R.id.exitButton);
-        optionalImageView = findViewById(R.id.optionalImageView);
-        fakeMapsView = findViewById(R.id.fakeMapView);
+        facebook_button = findViewById(R.id.facebook_button);
+        maps_button = findViewById(R.id.maps_button);
+        instagram_button = findViewById(R.id.instagram_button);
+
+        userNameView.setText("Bienvenido " +userName + "!");
     }
 
     //Metodo para crear la tarea asincrona
@@ -148,14 +148,10 @@ public class Home_Activity extends AppCompatActivity{
         @Override
         protected String doInBackground(String... strings) {
             result = HttpConnect.getRequest(strings[1]);
-            return result;
-        }
 
-        @Override
-        protected void onPostExecute(String s) {
             try {
-                if (s != null) {
-                    JSONArray jsonArr = new JSONArray(s);
+                if (result != null) {
+                    JSONArray jsonArr = new JSONArray(result);
 
                     for (int i = 0; i < jsonArr.length(); i++){
 
@@ -171,14 +167,17 @@ public class Home_Activity extends AppCompatActivity{
                         Offer offer = new Offer(id, name, week_day, price);
                         offerList.add(offer);
                     }
-
-                    loadOffer(offerList);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
+            return result;
+        }
 
+        @Override
+        protected void onPostExecute(String s) {
+            loadOffer(offerList);
         }
     }
 
@@ -190,14 +189,10 @@ public class Home_Activity extends AppCompatActivity{
         @Override
         protected String doInBackground(String... strings) {
             result = HttpConnect.getRequest(strings[1]);
-            return result;
-        }
 
-        @Override
-        protected void onPostExecute(String s) {
             try {
-                if (s != null) {
-                    JSONArray jsonArr = new JSONArray(s);
+                if (result != null) {
+                    JSONArray jsonArr = new JSONArray(result);
 
                     for (int i = 0; i < jsonArr.length(); i++)
                     {
@@ -206,16 +201,26 @@ public class Home_Activity extends AppCompatActivity{
                         //Obtenemos los datos de interes de nuestro objeto JSON
                         String id = jsonObject.getString("Id");
                         String ubication = jsonObject.getString("Ubication");
+                        String facebook_link = jsonObject.getString("Fb_link");
+                        String instagram_link = jsonObject.getString("Ig_link");
                         String adress = jsonObject.getString("Adress");
+                        String number = jsonObject.getString("Number");
 
                         //Cargamos los datos del local a nuestro objeto
-                        local = new Local(id, ubication, adress);
+                        local = new Local(id, ubication,facebook_link,instagram_link, adress,number);
                     }
                 }
 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            txtLocalNumber.setText(local.getNumber());
         }
     }
 
@@ -252,16 +257,40 @@ public class Home_Activity extends AppCompatActivity{
         secondOfferPrice.setText(secondOffer.getPrice());
     }
 
-    private String dayChanger(String old_day){
-        String new_day = "0";
+    private void loadData(){
+        if(utils.comprobarInternet(this)){
+            new getOfferTask().execute("GET","/selectOffer.php?week_day=\""+now+"\"");
+            new getLocalTask().execute("GET","/selectLocal.php");
 
-        if(old_day.equals("1")){
-            new_day = "7";
+
         }else{
-            new_day = String.valueOf(Integer.parseInt(old_day) - 1);
+            offerList.add(db_management.getOffers(now).get(0));
+            offerList.add(db_management.getOffers(now).get(1));
+            local = db_management.getLocalData("01").get(0);
+
+            firstOffer = offerList.get(0);
+            secondOffer = offerList.get(1);
+
+            firstOfferDesc.setText(firstOffer.getName());
+            firstOfferPrice.setText(firstOffer.getPrice());
+            secondOfferDesc.setText(secondOffer.getName());
+            secondOfferPrice.setText(secondOffer.getPrice());
+
+            txtLocalNumber.setText(local.getNumber());
+        }
+    }
+
+    private void navigateTo(String link){
+        if(utils.comprobarInternet(getBaseContext()) && !link.equals("958 16 75 39")){
+            Uri uri = Uri.parse(link);
+            Intent intent = new Intent(Intent.ACTION_VIEW,uri);
+            startActivity(intent);
         }
 
-        return new_day;
+        if(link.equals("958 16 75 39")){
+            String dial = "tel:" + link;
+            startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse(dial)));
+        }
     }
 }
 

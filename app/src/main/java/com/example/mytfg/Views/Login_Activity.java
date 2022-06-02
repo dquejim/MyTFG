@@ -62,15 +62,7 @@ public class Login_Activity extends AppCompatActivity {
                 loadRegisterButton();
             }
         });
-
-        bRegister.setOnHoverListener(new View.OnHoverListener() {
-            @Override
-            public boolean onHover(View view, MotionEvent motionEvent) {
-                bRegister.getPaint().setFlags (Paint.UNDERLINE_TEXT_FLAG);
-                return false;
-            }
-        });
-
+        
         //Accion del boton de login
         bLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,7 +110,7 @@ public class Login_Activity extends AppCompatActivity {
         if(db_management.checkUser("Invitado", "", 2) == null){
             //Insertamos en la base de datos el usuario al que nos conectaremos cuando no haya conexión
             db_management.insertUser("Invitado", "1234213453", "Default", "Default");
-            db_management.insertLocalData("01","https://goo.gl/maps/5MdAZttVLEe5jzr5A","Calle Almuñecar nº6");
+            db_management.insertLocalData("01","https://goo.gl/maps/5MdAZttVLEe5jzr5A","https://es-es.facebook.com/masquepizzasgranada/","https://www.instagram.com/masquepizzaszubia/?hl=es","Calle Almuñecar nº6","958 16 75 39");
             db_management.insertAllMenu();
         }
     }
@@ -162,17 +154,10 @@ public class Login_Activity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
             result = HttpConnect.getRequest(strings[1]);
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            //Declaramos un intent hacia la home_activity
-            Intent intent = new Intent(Login_Activity.this, Home_Activity.class);
 
             try {
-                if (s != null) {
-                    JSONArray jsonArr = new JSONArray(s);
+                if (result != null) {
+                    JSONArray jsonArr = new JSONArray(result);
 
                     for (int i = 0; i < jsonArr.length(); i++) {
                         JSONObject jsonObject = jsonArr.getJSONObject(i);
@@ -187,29 +172,39 @@ public class Login_Activity extends AppCompatActivity {
                         myUser = new User(user, password, number, adress);
                     }
 
-                    if(!s.equals("[]")) {
-                        if (searchedUser.getName().equals(myUser.getName()) && searchedUser.getPassword().equals(myUser.getPassword())) {
-                            //Lanzamos un toast de login correcto
-                            createToast("Login correcto!", R.drawable.tick, Color.GREEN);
-
-                            //Iniciamos el intent pasandole el nombre de usuario
-                            utils.setPreferences(myUser.getName(), sharedPreferences);
-                            startActivity(intent);
-
-                        } else {
-                            createToast("Usuario o contraseña incorrectos.", R.drawable.cross, Color.RED);
-                        }
-                    }else{
-                        createToast("Usuario o contraseña incorrectos.", R.drawable.cross, Color.RED);
-                    }
-
                     //Si no hay conexion a Internet, nos pregunta si queremos conectarnos como usuario
-                }else{
-                    createAlertDialog("Parece que está sin conexión, ¿desea acceder como invitado? uwu",intent);
                 }
 
             } catch (JSONException e) {
                 e.printStackTrace();
+            }
+
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            //Declaramos un intent hacia la home_activity
+            Intent intent = new Intent(Login_Activity.this, Home_Activity.class);
+
+            if(!s.equals("[]")) {
+                if (searchedUser.getName().equals(myUser.getName()) && searchedUser.getPassword().equals(myUser.getPassword())) {
+                    //Lanzamos un toast de login correcto
+                    createToast("Login correcto!", R.drawable.tick, Color.GREEN);
+
+                    //Iniciamos el intent pasandole el nombre de usuario
+                    utils.setPreferences(myUser.getName(), sharedPreferences);
+                    startActivity(intent);
+
+                } else {
+                    createToast("Usuario o contraseña incorrectos.", R.drawable.cross, Color.RED);
+                }
+            }else{
+                createToast("Usuario o contraseña incorrectos.", R.drawable.cross, Color.RED);
+            }
+
+            if(s == null){
+                createAlertDialog("Parece que está sin conexión, ¿desea acceder como invitado?",intent);
             }
         }
     }

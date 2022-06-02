@@ -18,9 +18,12 @@ $local = array();
 while($row = mysqli_fetch_array($result)) {
             $Id = $row['Id'];
             $Ubication = $row["Ubication"];
+            $Fb_link = $row["Fb_link"];
+            $Ig_link = $row["Ig_link"];
             $Adress = $row["Adress"];
+            $Number = $row["Number"];
 
-        $local[] = array('Id'=>$Id, 'Ubication'=>$Ubication, 'Adress'=>$Adress);
+        $local[] = array('Id'=>$Id, 'Ubication'=>$Ubication,'Fb_link'=>$Fb_link, 'Ig_link'=>$Ig_link,  'Adress'=>$Adress,'Number'=>$Number );
 }
 $close = mysqli_close($conexion)or die ("no connection");
 

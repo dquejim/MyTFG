@@ -30,15 +30,14 @@ import io.github.muddz.styleabletoast.StyleableToast;
 
 public class PersonalizeUser_Activity extends AppCompatActivity {
 
-    EditText textName;
-    EditText textPassword;
-    EditText textNumber;
-    EditText textAdress;
+    EditText textName,textPassword,textNumber,textAdress;
     TextView offLineText;
 
     Button buttonConfirm;
     BottomNavigationView bottomNavigationView;
     User myUser;
+
+    String userName;
 
     Utils utils = new Utils();
     SharedPreferences sharedPreferences;
@@ -50,13 +49,9 @@ public class PersonalizeUser_Activity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
-        String userName = (utils.getPreferences(sharedPreferences));
+        userName = (utils.getPreferences(sharedPreferences));
 
         initComponents();
-
-        if (utils.comprobarInternet(getBaseContext()) && !userName.equals("Invitado")) {
-            new PersonalizeUser_Activity.getUserTask().execute("GET","/selectUser.php?user=\""+userName+"\"");
-        }
 
         buttonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,6 +102,10 @@ public class PersonalizeUser_Activity extends AppCompatActivity {
             textNumber.setEnabled(false);
             textAdress.setEnabled(false);
             offLineText.setText("No dispones de conexión en estos momentos");
+        }
+
+        if (utils.comprobarInternet(getBaseContext()) && !userName.equals("Invitado")) {
+            new PersonalizeUser_Activity.getUserTask().execute("GET","/selectUser.php?user=\""+userName+"\"");
         }
     }
 

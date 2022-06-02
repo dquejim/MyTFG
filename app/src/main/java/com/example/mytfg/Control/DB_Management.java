@@ -41,7 +41,10 @@ public class DB_Management extends SQLiteOpenHelper{
     private String tableLocalData= "localData_table";
     private String tbLocal_idColumn = "id";
     private String tbLocal_ubicationColumn = "ubication";
+    private String tbLocal_facebookColumn = "facebook";
+    private String tbLocal_instagramColumn = "instagram";
     private String tbLocal_adressColumn = "adress";
+    private String tbLocal_numberColumn = "number";
 
     //Tabla de menu - variables
     private String tableMenu= "menu_table";
@@ -76,7 +79,10 @@ public class DB_Management extends SQLiteOpenHelper{
         CREATE_TABLE_DATA = "CREATE TABLE " + tableLocalData + "(" +
                 tbLocal_idColumn +" TEXT," +
                 tbLocal_ubicationColumn +" TEXT," +
-                tbLocal_adressColumn +" TEXT)";
+                tbLocal_facebookColumn +" TEXT," +
+                tbLocal_instagramColumn +" TEXT," +
+                tbLocal_adressColumn +" TEXT," +
+                tbLocal_numberColumn +" TEXT)";
 
         CREATE_TABLE_MENU = "CREATE TABLE " + tableMenu + "(" +
                 tbMenu_numberColumn +" TEXT," +
@@ -269,7 +275,7 @@ public class DB_Management extends SQLiteOpenHelper{
     }
 
     //Método para insertar un local en la BBDD
-    public long insertLocalData(String id, String ubication, String adress){
+    public long insertLocalData(String id, String ubication,String facebook_link,String instagram_link, String adress,String number){
 
         SQLiteDatabase db = this.getReadableDatabase();
         long query_result = -1;
@@ -279,7 +285,10 @@ public class DB_Management extends SQLiteOpenHelper{
         //Valores a insertar en la tabla
         values.put(tbLocal_idColumn,id);
         values.put(tbLocal_ubicationColumn, ubication);
+        values.put(tbLocal_facebookColumn,facebook_link);
+        values.put(tbLocal_instagramColumn,instagram_link);
         values.put(tbLocal_adressColumn,adress);
+        values.put(tbLocal_numberColumn,number);
 
         //Instruccion para insertar en la tabla, indicando los valores y el nombre de la misma
         query_result = db.insert(tableLocalData,null,values);
@@ -295,7 +304,7 @@ public class DB_Management extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Local> results= new ArrayList<>();
         Local localList = null;
-        String[] columns = new String[]{tbLocal_idColumn,tbLocal_ubicationColumn,tbLocal_adressColumn};
+        String[] columns = new String[]{tbLocal_idColumn,tbLocal_ubicationColumn,tbLocal_facebookColumn,tbLocal_instagramColumn,tbLocal_adressColumn,tbLocal_numberColumn};
 
         //Abrimos cursor con todos los resultados de la consulta
         Cursor c = db.query(tableLocalData,columns,tbLocal_idColumn+"=?", new String[]{id},null,null,null);
@@ -303,7 +312,7 @@ public class DB_Management extends SQLiteOpenHelper{
         //Si hay datos en nuestro cursor, obtenemos todos los datos de la columna y tabla indicadas
         if(c.moveToFirst()){
             do{
-                localList = new Local(c.getString(0),c.getString(1),c.getString(2));
+                localList = new Local(c.getString(0),c.getString(1),c.getString(2),c.getString(3),c.getString(4),c.getString(5));
                 results.add(localList);
             }while(c.moveToNext());
         }

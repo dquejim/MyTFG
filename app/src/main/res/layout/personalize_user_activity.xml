@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background2">
+    android:background="#FFFFFF">
 
     <androidx.cardview.widget.CardView
         android:layout_width="325dp"
@@ -24,6 +24,7 @@
         android:background="@color/black"
         app:cardBackgroundColor="#000000"
         app:cardCornerRadius="20dp"
+        app:cardElevation="150dp"
         app:layout_constraintBottom_toTopOf="@+id/menu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -218,7 +219,7 @@
         android:id="@+id/menu"
         android:layout_width="410dp"
         android:layout_height="58dp"
-        android:background="#BAB9B9"
+        android:background="#C5C1C1"
         app:itemRippleColor="#000000"
         app:itemTextColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"

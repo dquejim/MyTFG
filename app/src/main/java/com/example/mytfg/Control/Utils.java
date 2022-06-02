@@ -54,5 +54,18 @@ public class Utils {
         return user;
     }
 
+    public String dayChanger(String old_day){
+        String new_day = "0";
+
+        if(old_day.equals("1")){
+            new_day = "7";
+        }else{
+            new_day = String.valueOf(Integer.parseInt(old_day) - 1);
+        }
+
+        return new_day;
+    }
+
+
 
 }

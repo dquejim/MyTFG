@@ -79,7 +79,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
     private void setAnimation(View view,int position){
         if(position > lastPosition) {
             AlphaAnimation animation = new AlphaAnimation(0.0f, 1.0f);
-            animation.setDuration(1000);
+            animation.setDuration(500);
             view.startAnimation(animation);
             lastPosition = position;
         }

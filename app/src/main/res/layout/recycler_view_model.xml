@@ -20,7 +20,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:cardBackgroundColor="#4A4949">
+            app:cardBackgroundColor="#612940">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -30,7 +30,7 @@
                     android:id="@+id/cardView4"
                     android:layout_width="100dp"
                     android:layout_height="72dp"
-                    app:cardBackgroundColor="#C8BFBF"
+                    app:cardBackgroundColor="#9d6381"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/txtFoodProduct"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -56,9 +56,9 @@
                     android:layout_width="312dp"
                     android:layout_height="72dp"
                     android:layout_marginTop="8dp"
-                    android:background="#FFFFFF"
+                    android:background="#FDECEF"
                     android:fontFamily="@font/abel"
-                    android:gravity="start|center_vertical"
+                    android:gravity="center|center_vertical"
                     android:text="Titulo"
                     android:textAlignment="gravity"
                     android:textColor="@color/black"
@@ -79,6 +79,7 @@
         android:id="@+id/separator"
         android:layout_width="414dp"
         android:layout_height="9dp"
+        android:background="#612940"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
