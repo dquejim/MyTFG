@@ -9,12 +9,13 @@ $userName = $_GET['name'];
 $new_password = $_GET['password'];
 $new_number = $_GET['number'];
 $new_adress = $_GET['adress'];
+$fav_food = $_GET['fav_food'];
 
 //Creamos la conexión
 $conexion = mysqli_connect($server,$user,$pass,$bd)
 or die("Ha sucedido un error inexperado en la conexion de la base de datos");
 
-$sql = "UPDATE `tableLogin` SET `password` = ".$new_password.",`number`=".$new_number.",`adress`=".$new_adress." WHERE `user` = ".$userName;
+$sql = "UPDATE `tableLogin` SET `fav_food` = ".$fav_food.", `password` = ".$new_password.",`number`=".$new_number.",`adress`=".$new_adress." WHERE `user` = ".$userName;
 mysqli_set_charset($conexion, "utf8");
 if(!$result = mysqli_query($conexion, $sql)) die();
 

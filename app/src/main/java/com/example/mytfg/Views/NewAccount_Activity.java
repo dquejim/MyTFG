@@ -31,7 +31,6 @@ public class NewAccount_Activity extends AppCompatActivity {
     //Declaracion de variables
     Button bRegister;
     EditText textNameR,textPasswordR,textNumberR,textAdressR;
-    TextView txtUsersNumber;
     User myUser;
 
     DB_Management db_management = new DB_Management(this);
@@ -48,9 +47,7 @@ public class NewAccount_Activity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
 
         initComponents();
-
-        new NewAccount_Activity.getUsersNumber().execute("GET","/selectUser.php?user=\"%%\"");
-
+        
         //Añadimos una accion al pulsar el boton para registrarse
         bRegister.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,7 +64,6 @@ public class NewAccount_Activity extends AppCompatActivity {
         textPasswordR = (EditText) findViewById(R.id.textPasswordR);
         textNumberR = (EditText) findViewById(R.id.textNumberR);
         textAdressR = (EditText) findViewById(R.id.textAdressR);
-        txtUsersNumber = findViewById(R.id.txtUsersNumber);
     }
 
     private void loadLoginButton(){
@@ -80,7 +76,7 @@ public class NewAccount_Activity extends AppCompatActivity {
                 String user = textNameR.getText().toString();
                 new NewAccount_Activity.getUserTask().execute("GET","/selectUser.php?user=\""+user+"\"");
             }else{
-                createToast("Debes rellenar todos los campos.",R.drawable.cross,Color.RED);
+                utils.createToast("Debes rellenar todos los campos.",R.drawable.cross,Color.RED,NewAccount_Activity.this);
             }
 
             //Si no dispone de conexion a internet, nos lanza un alertDialog que nos pregunta si queremos iniciar sesion como invitado
@@ -108,12 +104,6 @@ public class NewAccount_Activity extends AppCompatActivity {
         });
         alertDialog.show();
     }
-    //Método para crear Toast personalizados
-    public void createToast(String title, int icon,int backgroundcolor){
-        new StyleableToast.Builder(NewAccount_Activity.this).text(title) //Texto del Toast y vista del mismo
-                .backgroundColor(backgroundcolor).textColor(Color.BLACK) //Fondo y color de texto
-                .iconStart(icon).show(); //Indicamos el icono del toast y lo mostramos
-    }
 
     //Metodo para crear la tarea asincrona
     private class getUserTask extends AsyncTask<String, Void, String> {
@@ -137,7 +127,7 @@ public class NewAccount_Activity extends AppCompatActivity {
                         String adress = jsonObject.getString("adress");
 
                         //Cargamos los datos del local a nuestro objeto
-                        myUser = new User(user, password, number, adress);
+                        myUser = new User(user, password, number, adress,"");
                     }
                 }
             } catch (JSONException e) {
@@ -153,44 +143,14 @@ public class NewAccount_Activity extends AppCompatActivity {
             Intent intent = new Intent(NewAccount_Activity.this, Home_Activity.class);
 
             if(s.equals("[]")){
-                new NewAccount_Activity.insertUserTask().execute("GET","/insertUser.php?name="+textNameR.getText()+"&password="+textPasswordR.getText()+"&number="+textNumberR.getText()+"&adress="+textAdressR.getText()+"");
+                new NewAccount_Activity.insertUserTask().execute("GET","/insertUser.php?name="+textNameR.getText()+"&password="+textPasswordR.getText()+"&number="+textNumberR.getText()+"&adress="+textAdressR.getText()+"&fav_food="+textAdressR.getText());
 
                 //Iniciamos el intent pasandole el nombre de usuario
                 utils.setPreferences(textNameR.getText().toString(), sharedPreferences);
                 startActivity(intent);
             }else{
-                createToast("El usuario ya existe!", R.drawable.cross, Color.RED);
+                utils.createToast("El usuario ya existe!", R.drawable.cross, Color.RED,NewAccount_Activity.this);
             }
-        }
-    }
-
-    //Metodo para crear la tarea asincrona
-    private class getUsersNumber extends AsyncTask<String, Void, String> {
-        String result;
-        int usersNumber = 0;
-
-        //Indicamos la funcion de la tarea asincrona, que será hacer peticiones GET a la API
-        @Override
-        protected String doInBackground(String... strings) {
-            result = HttpConnect.getRequest(strings[1]);
-            try {
-                if (result != null) {
-                    JSONArray jsonArr = new JSONArray(result);
-
-                    for (int i = 0; i < jsonArr.length(); i++) {
-                        usersNumber++;
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            txtUsersNumber.setText("   Ya hay registrados "+usersNumber+" usuarios!   ");
         }
     }
 
@@ -207,7 +167,7 @@ public class NewAccount_Activity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            createToast("Usuario creado correctamente!",R.drawable.tick,Color.GREEN);
+            utils.createToast("Usuario creado correctamente!",R.drawable.tick,Color.GREEN,NewAccount_Activity.this);
         }
     }
 }

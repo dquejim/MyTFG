@@ -58,11 +58,11 @@ public class PersonalizeUser_Activity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(PersonalizeUser_Activity.this,Home_Activity.class);
                 if(!utils.comprobarInternet(getBaseContext()) || userName.equals("Invitado")){
-                    createToast("No puedes modificar un usuario sin conexion!",R.drawable.cross,Color.RED);
+                    utils.createToast("No puedes modificar un usuario sin conexion!",R.drawable.cross,Color.RED,PersonalizeUser_Activity.this);
                     startActivity(intent);
                 }else{
                     if(!textPassword.getText().equals(myUser.getPassword()) || !textNumber.getText().equals(myUser.getNumber()) || !textAdress.getText().equals(myUser.getAdress())){
-                        new PersonalizeUser_Activity.updateUserTask().execute("GET","/updateUser.php?password=\""+textPassword.getText()+"\"&number=\""+textNumber.getText()+"\"&adress=\""+textAdress.getText()+"\"&name=\""+myUser.getName()+"\"" );
+                        new PersonalizeUser_Activity.updateUserTask().execute("GET","/updateUser.php?password=\""+textPassword.getText()+"\"&number=\""+textNumber.getText()+"\"&adress=\""+textAdress.getText()+"\"&name=\""+myUser.getName()+"\"&fav_food=\"-\"" );
                     }
                     startActivity(intent);
                 }
@@ -76,12 +76,6 @@ public class PersonalizeUser_Activity extends AppCompatActivity {
                 return true;
             }
         });
-    }
-
-    public void createToast(String title, int icon,int backgroundcolor){
-        new StyleableToast.Builder(PersonalizeUser_Activity.this).text(title) //Texto del Toast y vista del mismo
-                .backgroundColor(backgroundcolor).textColor(Color.BLACK) //Fondo y color de texto
-                .iconStart(icon).show(); //Indicamos el icono del toast y lo mostramos
     }
 
     private void initComponents(){
@@ -133,7 +127,6 @@ public class PersonalizeUser_Activity extends AppCompatActivity {
     //Metodo para crear la tarea asincrona
     private class getUserTask extends AsyncTask<String, Void, String> {
         //Declaramos un intent hacia la home_activity
-        Intent intent = new Intent(PersonalizeUser_Activity.this, Home_Activity.class);
         String result;
 
         //Indicamos la funcion de la tarea asincrona, que será hacer peticiones GET a la API
@@ -152,9 +145,10 @@ public class PersonalizeUser_Activity extends AppCompatActivity {
                         String password = jsonObject.getString("password");
                         String number = jsonObject.getString("number");
                         String adress = jsonObject.getString("adress");
+                        String fav_food = jsonObject.getString("fav_food");
 
                         //Cargamos los datos del local a nuestro objeto
-                        myUser = new User(user, password, number, adress);
+                        myUser = new User(user, password, number, adress,fav_food);
                     }
                 }
             } catch (JSONException e) {
@@ -190,7 +184,7 @@ public class PersonalizeUser_Activity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            createToast("Usuario modificado correctamente!",R.drawable.tick,Color.GREEN);
+            utils.createToast("Usuario modificado correctamente!",R.drawable.tick,Color.GREEN,PersonalizeUser_Activity.this);
             }
         }
 

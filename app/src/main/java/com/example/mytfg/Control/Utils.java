@@ -2,6 +2,7 @@ package com.example.mytfg.Control;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -9,6 +10,7 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 
 import com.example.mytfg.Models.Offer;
+import com.example.mytfg.Views.PersonalizeUser_Activity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,6 +24,8 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.*;
 import org.json.*;
+
+import io.github.muddz.styleabletoast.StyleableToast;
 
 public class Utils {
 
@@ -66,6 +70,9 @@ public class Utils {
         return new_day;
     }
 
-
-
+    public void createToast(String title, int icon,int backgroundcolor,Context context){
+        new StyleableToast.Builder(context).text(title) //Texto del Toast y vista del mismo
+                .backgroundColor(backgroundcolor).textColor(Color.BLACK) //Fondo y color de texto
+                .iconStart(icon).show(); //Indicamos el icono del toast y lo mostramos
+    }
 }

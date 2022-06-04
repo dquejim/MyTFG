@@ -21,8 +21,9 @@ while($row = mysqli_fetch_array($result)) {
             $password = $row["password"];
             $number = $row["number"];
             $adress = $row["adress"];
+            $fav_food = $row["fav_food"];
 
-        $users[] = array('user'=>$user, 'password'=>$password, 'number'=>$number, 'adress'=>$adress);
+        $users[] = array('user'=>$user, 'password'=>$password, 'number'=>$number, 'adress'=>$adress,'fav_food'=>$fav_food);
 }
 $close = mysqli_close($conexion)or die ("no connection");
 

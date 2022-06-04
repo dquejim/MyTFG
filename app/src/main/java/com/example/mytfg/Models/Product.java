@@ -1,16 +1,20 @@
 package com.example.mytfg.Models;
 
-public class Food {
+import java.io.Serializable;
+
+public class Product implements Serializable {
     private String number;
     private String category;
     private String product;
     private String price;
+    private String description;
 
-    public Food(String number, String category, String product, String price){
+    public Product(String number, String category, String product, String price, String description){
         this.number = number;
         this.category = category;
         this.product = product;
         this.price = price;
+        this.description = description;
     }
 
     public String getNumber() {
@@ -29,5 +33,7 @@ public class Food {
         return price;
     }
 
-
+    public String getDescription(){
+        return this.description;
+    }
 }

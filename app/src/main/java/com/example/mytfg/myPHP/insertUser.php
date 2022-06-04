@@ -14,8 +14,9 @@ $name = $_GET["name"];
 $password = $_GET["password"];
 $number = $_GET["number"];
 $adress =  $_GET["adress"];
+$fav_food =  $_GET["fav_food"];
 
-$sql = "INSERT INTO tableLogin (user, password , number, adress) VALUES ('$name','$password','$number','$adress')";
+$sql = "INSERT INTO tableLogin (user, password , number, adress,fav_food) VALUES ('$name','$password','$number','$adress','$fav_food')";
 mysqli_set_charset($conexion, "utf8"); //formato de datos utf8
 echo $sql;
 

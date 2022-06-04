@@ -1,15 +1,12 @@
 package com.example.mytfg.Views;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,7 +19,7 @@ import com.example.mytfg.Control.DB_Management;
 import com.example.mytfg.Control.HttpConnect;
 import com.example.mytfg.Control.RecyclerAdapter;
 import com.example.mytfg.Control.Utils;
-import com.example.mytfg.Models.Food;
+import com.example.mytfg.Models.Product;
 import com.example.mytfg.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -38,6 +35,8 @@ public class Food_Activity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
 
     CardView sandwich_option,pizza_option,camp_option,burguer_option,potato_option,bread_option;
+
+    ImageView infoPopUp;
     
     RecyclerView recyclerView;
     RecyclerAdapter recAdapter;
@@ -45,9 +44,11 @@ public class Food_Activity extends AppCompatActivity {
     LinearLayoutManager layoutManager;
     ConstraintLayout presentationLayout;
 
-    ArrayList<Food> foodList = new ArrayList<>();
+    ArrayList<Product> productList = new ArrayList<>();
+    DB_Management db_management;
     Utils utils = new Utils();
-    DB_Management db_management = new DB_Management(this);
+    SharedPreferences sharedPreferences;
+    String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +56,18 @@ public class Food_Activity extends AppCompatActivity {
         setContentView(R.layout.food_activity);
         getSupportActionBar().hide();
 
+        db_management = new  DB_Management(getBaseContext());
+        sharedPreferences  = getSharedPreferences("user", MODE_PRIVATE);
+        userName = utils.getPreferences(sharedPreferences);
+
         initComponents();
+
+        recAdapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDetails(view);
+            }
+        });
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -119,12 +131,14 @@ public class Food_Activity extends AppCompatActivity {
         potato_option = findViewById(R.id.potatoeButton);
         bread_option = findViewById(R.id.breadButton);
 
+        infoPopUp = findViewById(R.id.infoPopUp);
+
         recyclerView = (RecyclerView) findViewById(R.id.myRecyclerView);
         layoutManager = new LinearLayoutManager(this);
         presentationLayout = findViewById(R.id.presentationLayout);
 
         //Le indicamos el adaptador a usar, así como su layout
-        recAdapter = new RecyclerAdapter(foodList);
+        recAdapter = new RecyclerAdapter(productList);
         recyclerView.setAdapter(recAdapter);
         recyclerView.setLayoutManager(layoutManager);
     }
@@ -172,9 +186,10 @@ public class Food_Activity extends AppCompatActivity {
                         String name = jsonObject.getString("category");
                         String week_day = jsonObject.getString("product");
                         String price = jsonObject.getString("price");
+                        String description = jsonObject.getString("description");
 
                         //Creamos un objeto comida y lo añadimos a la lista
-                        foodList.add(new Food(id, name, week_day, price));
+                        productList.add(new Product(id, name, week_day, price,description));
                     }
                 }
             } catch (JSONException e) {
@@ -197,21 +212,28 @@ public class Food_Activity extends AppCompatActivity {
         //Indicamos la funcion de la tarea asincrona, que será hacer peticiones GET a la API
         @Override
         protected String doInBackground(String... strings) {
-            foodList = (ArrayList<Food>) db_management.getProducts(strings[0]);
+            productList = (ArrayList<Product>) db_management.getProducts(strings[0]);
             return result;
         }
 
         @Override
         protected void onPostExecute(String s) {
-            recAdapter = new RecyclerAdapter(foodList);
+            recAdapter = new RecyclerAdapter(productList);
             recyclerView.setAdapter(recAdapter);
             recyclerView.setLayoutManager(layoutManager);
             recAdapter.notifyDataSetChanged();
+
+            recAdapter.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    showDetails(view);
+                }
+            });
         }
     }
 
     private void loadMenuOptions(String menu_option){
-        foodList.clear();
+        productList.clear();
         presentationLayout.setVisibility(View.GONE);
 
         if(utils.comprobarInternet(getBaseContext())) {
@@ -219,6 +241,13 @@ public class Food_Activity extends AppCompatActivity {
         }else{
             new getOffLineMenu().execute(menu_option);
         }
+    }
+
+    private void showDetails(View view){
+       int position = recyclerView.getChildAdapterPosition(view);
+       Intent intent = new Intent(Food_Activity.this,popUpActivity.class);
+       intent.putExtra("Product", productList.get(position));
+       startActivity(intent);
     }
 
 }

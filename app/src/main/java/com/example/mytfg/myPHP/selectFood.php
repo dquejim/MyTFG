@@ -21,8 +21,9 @@ while($row = mysqli_fetch_array($result)) {
             $category = $row["category"];
             $product = $row["product"];
             $price = $row["price"];
+            $description = $row["description"];
 
-        $foods[] = array('number'=>$number, 'category'=>$category, 'product'=>$product, 'price'=>$price);
+        $foods[] = array('number'=>$number, 'category'=>$category, 'product'=>$product, 'price'=>$price,'description'=>$description);
 }
 $close = mysqli_close($conexion)or die ("no connection");
 

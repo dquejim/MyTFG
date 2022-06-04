@@ -22,6 +22,7 @@
             <activity android:name=".Views.Home_Activity"></activity>
             <activity android:name=".Views.PersonalizeUser_Activity"></activity>
             <activity android:name=".Views.Food_Activity"></activity>
+            <activity android:name=".Views.popUpActivity" android:theme="@style/PopUpStyle"></activity>
 
     </application>
 

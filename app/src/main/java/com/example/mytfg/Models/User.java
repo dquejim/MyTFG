@@ -5,15 +5,14 @@ public class User {
     private String password;
     private String number;
     private String adress;
+    private String fav_food;
 
-    public User(String name, String password, String number, String adress){
+    public User(String name, String password, String number, String adress,String fav_food){
         this.name = name;
         this.password = password;
         this.number = number;
         this.adress = adress;
-    }
-
-    public User() {
+        this.fav_food = fav_food;
     }
 
     public String getName() {
@@ -32,5 +31,11 @@ public class User {
         return adress;
     }
 
+    public String getFav_food(){
+        return fav_food;
+    }
 
+    public void setFav_food(String fav_food) {
+        this.fav_food = fav_food;
+    }
 }

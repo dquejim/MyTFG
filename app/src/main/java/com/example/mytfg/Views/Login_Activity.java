@@ -92,13 +92,6 @@ public class Login_Activity extends AppCompatActivity {
 
     }
 
-    //Método para crear Toast personalizados
-    public void createToast(String title, int icon,int backgroundcolor){
-        new StyleableToast.Builder(Login_Activity.this).text(title) //Texto del Toast y vista del mismo
-                .backgroundColor(backgroundcolor).textColor(Color.BLACK) //Fondo y color de texto
-                .iconStart(icon).show(); //Indicamos el icono del toast y lo mostramos
-    }
-
     private void initComponents(){
         //"Enlazamos" los componentes graficos con las variables creadas anteriormente
         bRegister = (TextView) findViewById(R.id.bRegister);
@@ -122,7 +115,7 @@ public class Login_Activity extends AppCompatActivity {
             if(!textName.getText().toString().isEmpty() && !textPassword.getText().toString().isEmpty()) {
                 String user = textName.getText().toString();
                 String password = textPassword.getText().toString();
-                searchedUser = new User(user,password,"","");
+                searchedUser = new User(user,password,"","","");
 
                 new Login_Activity.getUserTask().execute("GET","/selectUser.php?user=\""+user+"\"");
 
@@ -169,7 +162,7 @@ public class Login_Activity extends AppCompatActivity {
                         String adress = jsonObject.getString("adress");
 
                         //Cargamos los datos del local a nuestro objeto
-                        myUser = new User(user, password, number, adress);
+                        myUser = new User(user, password, number, adress,"");
                     }
 
                     //Si no hay conexion a Internet, nos pregunta si queremos conectarnos como usuario
@@ -190,17 +183,17 @@ public class Login_Activity extends AppCompatActivity {
             if(!s.equals("[]")) {
                 if (searchedUser.getName().equals(myUser.getName()) && searchedUser.getPassword().equals(myUser.getPassword())) {
                     //Lanzamos un toast de login correcto
-                    createToast("Login correcto!", R.drawable.tick, Color.GREEN);
+                    utils.createToast("Login correcto!", R.drawable.tick, Color.GREEN,Login_Activity.this);
 
                     //Iniciamos el intent pasandole el nombre de usuario
                     utils.setPreferences(myUser.getName(), sharedPreferences);
                     startActivity(intent);
 
                 } else {
-                    createToast("Usuario o contraseña incorrectos.", R.drawable.cross, Color.RED);
+                    utils.createToast("Usuario o contraseña incorrectos.", R.drawable.cross, Color.RED,Login_Activity.this);
                 }
             }else{
-                createToast("Usuario o contraseña incorrectos.", R.drawable.cross, Color.RED);
+                utils.createToast("Usuario o contraseña incorrectos.", R.drawable.cross, Color.RED,Login_Activity.this);
             }
 
             if(s == null){
