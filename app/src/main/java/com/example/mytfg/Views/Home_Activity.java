@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,7 +19,6 @@ import com.example.mytfg.Control.Utils;
 import com.example.mytfg.Models.Local;
 import com.example.mytfg.Models.Offer;
 import com.example.mytfg.R;
-import com.example.mytfg.Models.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
@@ -28,13 +26,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 public class Home_Activity extends AppCompatActivity{
 
+    //Declaraión de variables
     DB_Management db_management = new DB_Management(this);
     ArrayList<Offer> offerList = new ArrayList<>();
     SharedPreferences sharedPreferences;
@@ -57,18 +54,25 @@ public class Home_Activity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_activity);
+
+        //Escondemos el ActionBar
         getSupportActionBar().hide();
 
+        //Obtenemos el dia de la semana en el que estamos
         now = String.valueOf(c.get(Calendar.DAY_OF_WEEK));
         now = utils.dayChanger(now);
 
+        //Obtenemos las preferencias, que nos dará el nombre de usuario con el que estams registrados
         sharedPreferences  = getSharedPreferences("user", MODE_PRIVATE);
         userName = utils.getPreferences(sharedPreferences);
 
+        //Iniciamos componentes
         initComponents();
 
+        //Cargamos los datos necesarios
         loadData();
 
+        //Indicamos los listeners y sus eventos
         View.OnClickListener listener = new View.OnClickListener()
         {
             @Override
@@ -140,7 +144,7 @@ public class Home_Activity extends AppCompatActivity{
         userNameView.setText("Bienvenido " +userName + "!");
     }
 
-    //Metodo para crear la tarea asincrona
+    //Tarea asincrona para obtener todas las ofertas
     private class getOfferTask extends AsyncTask<String, Void, String> {
         String result;
 
@@ -181,7 +185,7 @@ public class Home_Activity extends AppCompatActivity{
         }
     }
 
-    //Metodo para crear la tarea asincrona
+    //Tarea asincrona para obtener los datos del local
     private class getLocalTask extends AsyncTask<String, Void, String> {
         String result;
 
@@ -224,6 +228,7 @@ public class Home_Activity extends AppCompatActivity{
         }
     }
 
+    //Método para cargar y gestionar el menu para navegar entre actividades
     private void loadMenu(MenuItem item){
         Intent intent = null;
 
@@ -242,9 +247,12 @@ public class Home_Activity extends AppCompatActivity{
         }
 
         startActivity(intent);
+
+        //Eliminacion de la animacion del intent
         overridePendingTransition(0,0);
     }
 
+    //Método para unir los datos de ofertas con la vista
     private void loadOffer(ArrayList<Offer> myList){
         offerList = myList;
 
@@ -257,12 +265,14 @@ public class Home_Activity extends AppCompatActivity{
         secondOfferPrice.setText(secondOffer.getPrice());
     }
 
+    //Método para cargar y gestionar los datos tanto de ofertas como del local
     private void loadData(){
-        if(utils.comprobarInternet(this)){
+        //Si disponemos de conexión a Internet lo carga de Internet
+        if(utils.checkInternetConnection(this)){
             new getOfferTask().execute("GET","/selectOffer.php?week_day=\""+now+"\"");
             new getLocalTask().execute("GET","/selectLocal.php");
 
-
+            //Si no disponemos, lo hace de la base de datos
         }else{
             offerList.add(db_management.getOffers(now).get(0));
             offerList.add(db_management.getOffers(now).get(1));
@@ -280,13 +290,15 @@ public class Home_Activity extends AppCompatActivity{
         }
     }
 
+    //Método con el que navegaremos a links como el de instagram, facebook ...
     private void navigateTo(String link){
-        if(utils.comprobarInternet(getBaseContext()) && !link.equals("958 16 75 39")){
+        if(utils.checkInternetConnection(getBaseContext()) && !link.equals("958 16 75 39")){
             Uri uri = Uri.parse(link);
             Intent intent = new Intent(Intent.ACTION_VIEW,uri);
             startActivity(intent);
         }
 
+        //Si el parámetro a navegar es el numero de teléfono, nos llevará a la libreta de contactos
         if(link.equals("958 16 75 39")){
             String dial = "tel:" + link;
             startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse(dial)));

@@ -14,7 +14,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.mytfg.Control.DB_Management;
 import com.example.mytfg.Control.HttpConnect;
 import com.example.mytfg.Control.Utils;
 import com.example.mytfg.R;
@@ -26,10 +25,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import io.github.muddz.styleabletoast.StyleableToast;
-
 public class PersonalizeUser_Activity extends AppCompatActivity {
 
+    //Declaración de variables
     EditText textName,textPassword,textNumber,textAdress;
     TextView offLineText;
 
@@ -46,22 +44,29 @@ public class PersonalizeUser_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.personalize_user_activity);
+        //Escondemos el Action Bar
         getSupportActionBar().hide();
 
+        //Obtenemos el usuario con el que estamos conectados en este momento
         sharedPreferences = getSharedPreferences("user", MODE_PRIVATE);
         userName = (utils.getPreferences(sharedPreferences));
 
         initComponents();
 
+        //Indicamos los listener y acciones necesarios
         buttonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Creamos un intemt hacia la Home_Activity
                 Intent intent = new Intent(PersonalizeUser_Activity.this,Home_Activity.class);
-                if(!utils.comprobarInternet(getBaseContext()) || userName.equals("Invitado")){
+
+                //Si no tenemos internet o  estamos conectados como invitados
+                if(!utils.checkInternetConnection(getBaseContext()) || userName.equals("Invitado")){
                     utils.createToast("No puedes modificar un usuario sin conexion!",R.drawable.cross,Color.RED,PersonalizeUser_Activity.this);
                     startActivity(intent);
                 }else{
                     if(!textPassword.getText().equals(myUser.getPassword()) || !textNumber.getText().equals(myUser.getNumber()) || !textAdress.getText().equals(myUser.getAdress())){
+                        //Lanzamos la tarea asincrona que actualizará nuestro usuario en la base de datos
                         new PersonalizeUser_Activity.updateUserTask().execute("GET","/updateUser.php?password=\""+textPassword.getText()+"\"&number=\""+textNumber.getText()+"\"&adress=\""+textAdress.getText()+"\"&name=\""+myUser.getName()+"\"&fav_food=\"-\"" );
                     }
                     startActivity(intent);
@@ -78,6 +83,7 @@ public class PersonalizeUser_Activity extends AppCompatActivity {
         });
     }
 
+    //Método para iniciar componentes gráficos y otros procesos
     private void initComponents(){
         textName = findViewById(R.id.textNameR);
         textName.setEnabled(false);
@@ -91,18 +97,21 @@ public class PersonalizeUser_Activity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.menu);
         bottomNavigationView.setSelectedItemId(R.id.user_option);
 
-        if(!utils.comprobarInternet(getBaseContext())){
+        //Si no tenemos conexión a Internet, desactivamos los botones
+        if(!utils.checkInternetConnection(getBaseContext())){
             textPassword.setEnabled(false);
             textNumber.setEnabled(false);
             textAdress.setEnabled(false);
             offLineText.setText("No dispones de conexión en estos momentos");
         }
 
-        if (utils.comprobarInternet(getBaseContext()) && !userName.equals("Invitado")) {
+        //Si tenemos conexion y no estamos como invitados, lanzamos una tarea asincrona para obtener el usuario con el que estamos conectados
+        if (utils.checkInternetConnection(getBaseContext()) && !userName.equals("Invitado")) {
             new PersonalizeUser_Activity.getUserTask().execute("GET","/selectUser.php?user=\""+userName+"\"");
         }
     }
 
+    //Método para cargar el menú de navegación y sus componentes
     private void loadMenu(MenuItem item){
         Intent intent = null;
 
@@ -121,10 +130,11 @@ public class PersonalizeUser_Activity extends AppCompatActivity {
         }
 
         startActivity(intent);
+        //Eliminación de la animación entre intents
         overridePendingTransition(0,0);
     }
 
-    //Metodo para crear la tarea asincrona
+    //Tarea asincrona para obtener un usuario y sus datos
     private class getUserTask extends AsyncTask<String, Void, String> {
         //Declaramos un intent hacia la home_activity
         String result;
@@ -158,11 +168,13 @@ public class PersonalizeUser_Activity extends AppCompatActivity {
             return result;
         }
 
+        //Indicamos la función del proceso una vez haya acabado
         @Override
         protected void onPostExecute(String s) {
             //Declaramos un intent hacia la home_activity
             Intent intent = new Intent(PersonalizeUser_Activity.this, Home_Activity.class);
-            if(utils.comprobarInternet(getBaseContext())){
+            //Si tenemos conexion a internet,actualizamos nuestros datos
+            if(utils.checkInternetConnection(getBaseContext())){
                 textName.setText(myUser.getName());
                 textAdress.setText(myUser.getAdress());
                 textPassword.setText(myUser.getPassword());
@@ -171,7 +183,7 @@ public class PersonalizeUser_Activity extends AppCompatActivity {
         }
     }
 
-    //Metodo para crear la tarea asincrona
+    //Tarea asincrona para actualizar un usuario
     private class updateUserTask extends AsyncTask<String, Void, String> {
         String result;
 

@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,8 +22,6 @@ import com.example.mytfg.R;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import io.github.muddz.styleabletoast.StyleableToast;
 
 public class NewAccount_Activity extends AppCompatActivity {
 
@@ -66,12 +63,13 @@ public class NewAccount_Activity extends AppCompatActivity {
         textAdressR = (EditText) findViewById(R.id.textAdressR);
     }
 
+    //Método para cargar el boton de registrarse y crear un nuevo usuario
     private void loadLoginButton(){
         //Declaramos un intent desde esta actividad hasta la principal
         Intent intent = new Intent(NewAccount_Activity.this, Home_Activity.class);
 
         //Si tenemos conexion a internet obtenemos los datos que el usuario ha introducido en las cajas de texto
-        if(utils.comprobarInternet(getBaseContext())){
+        if(utils.checkInternetConnection(getBaseContext())){
             if(!textNameR.getText().toString().isEmpty() && !textPasswordR.getText().toString().isEmpty()  && !textNumberR.getText().toString().isEmpty()  && !textAdressR.getText().toString().isEmpty() ) {
                 String user = textNameR.getText().toString();
                 new NewAccount_Activity.getUserTask().execute("GET","/selectUser.php?user=\""+user+"\"");
@@ -105,7 +103,7 @@ public class NewAccount_Activity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    //Metodo para crear la tarea asincrona
+    //Tarea asincrona para obtener un usuario a partir de su nombre
     private class getUserTask extends AsyncTask<String, Void, String> {
         String result;
 
@@ -137,12 +135,15 @@ public class NewAccount_Activity extends AppCompatActivity {
             return result;
         }
 
+        //Indicamos lo que hará el proceso en la vista una vez acabe
         @Override
         protected void onPostExecute(String s) {
             //Declaramos un intent hacia la home_activity
             Intent intent = new Intent(NewAccount_Activity.this, Home_Activity.class);
 
+            //Si el usuario no existe
             if(s.equals("[]")){
+                //Iniciamos una tarea asincrona para crear un usuario con los datos dados
                 new NewAccount_Activity.insertUserTask().execute("GET","/insertUser.php?name="+textNameR.getText()+"&password="+textPasswordR.getText()+"&number="+textNumberR.getText()+"&adress="+textAdressR.getText()+"&fav_food="+textAdressR.getText());
 
                 //Iniciamos el intent pasandole el nombre de usuario
@@ -154,7 +155,7 @@ public class NewAccount_Activity extends AppCompatActivity {
         }
     }
 
-    //Metodo para crear la tarea asincrona
+    //Tarea asincrona para insertar un usuario
     private class insertUserTask extends AsyncTask<String, Void, String> {
         String result;
 

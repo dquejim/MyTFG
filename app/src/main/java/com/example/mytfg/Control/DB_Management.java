@@ -18,11 +18,12 @@ import java.util.List;
 public class DB_Management extends SQLiteOpenHelper{
     private static final String DB_NAME = "db_tfg";
     private static final int CURRENT_VERSION = 1;
+
+    //Variables de creación de las tablas
     private String CREATE_TABLE_LOGIN = "";
     private String CREATE_TABLE_OFFER = "";
     private String CREATE_TABLE_DATA = "";
     private String CREATE_TABLE_MENU = "";
-    private String CREATE_TABLE_DELIVERY = "";
 
     //Tabla de usuarios - variables
     private String tableLogin = "login_table";
@@ -106,6 +107,9 @@ public class DB_Management extends SQLiteOpenHelper{
 
     }
 
+
+    //----------------Métodos de gestión de usuario----------------
+
     //Método para insertar un usuario en la BBDD
     public long insertUser(String user, String password, String number, String adress){
 
@@ -176,10 +180,10 @@ public class DB_Management extends SQLiteOpenHelper{
         return result;
     }
 
-    public void deleteDB(){
-        cContext.deleteDatabase(DB_NAME);
-    }
 
+    //----------------Métodos de gestión de ofertas----------------
+
+    //Método para insertar ofertas en la base de datos
     private long insertOfferData(String id,String name,String day,String price){
         SQLiteDatabase db = this.getReadableDatabase();
         long query_result = -1;
@@ -200,7 +204,7 @@ public class DB_Management extends SQLiteOpenHelper{
         return query_result;
     }
 
-    //Método pars obtener todos los datos de una oferta
+    //Método pars obtener todos los datos de las ofertas
     public List<Offer> getOffers(String weekDay){
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Offer> results= new ArrayList<>();
@@ -224,6 +228,7 @@ public class DB_Management extends SQLiteOpenHelper{
         return results;
     }
 
+    //Método que inserta todas las ofertas en nuestra base de datos
     private void insertAllOffers(){
         insertOfferData("L101","Ensalada césar \nPollo asado","1","12€");
         insertOfferData("L102","Ración de patatas fritas \nSandwich completo","1","6.5€");
@@ -246,6 +251,8 @@ public class DB_Management extends SQLiteOpenHelper{
         insertOfferData("D101","Pizza andaluza \nLambrusco","7","18€");
         insertOfferData("D102","Nuggets de pollo 20 u. \nRación de patatas fritas","7","10€");
     }
+
+    ////----------------Métodos de gestión de datos del local----------------
 
     //Método para insertar un local en la BBDD
     public long insertLocalData(String id, String ubication,String facebook_link,String instagram_link, String adress,String number){
@@ -296,8 +303,9 @@ public class DB_Management extends SQLiteOpenHelper{
         return results;
     }
 
-    //--------------------------------------------------------------------
-    //Método para insertar un usuario en la BBDD
+    //----------------Métodos de gestión de productos----------------
+
+    //Método para insertar un producto en la BBDD
     public long insertProduct(String number, String category, String product, String price,String description){
         SQLiteDatabase db = this.getReadableDatabase();
         long query_result = -1;
@@ -321,7 +329,7 @@ public class DB_Management extends SQLiteOpenHelper{
         return query_result;
     }
 
-    //Método pars obtener todos los datos de una oferta
+    //Método pars obtener todos los datos de un producto
     public List<Product> getProducts(String category){
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<Product> results= new ArrayList<>();
@@ -345,6 +353,7 @@ public class DB_Management extends SQLiteOpenHelper{
         return results;
     }
 
+    //Método para insertar todos los productos del menú
     public void insertAllMenu(){
         insertProduct("1","Sandwiches","Sandwich Mixto","3.30€",
                 "Doble de Queso y Jamón York");

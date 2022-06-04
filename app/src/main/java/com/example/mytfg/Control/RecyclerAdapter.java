@@ -25,7 +25,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
     @NonNull
     @Override
     //Metodo que crea la estructura de los componentes de cada celda
-    //Con LayoutInflater cogemos la vista de la celda y la anidamos a la estructurajerárquica del padre
+    //Con LayoutInflater cogemos la vista de la celda y la anidamos a la estructura jerárquica del padre
     public RecyclerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_view_model,parent, false);
         RecyclerHolder recyclerHolder = new RecyclerHolder(view);

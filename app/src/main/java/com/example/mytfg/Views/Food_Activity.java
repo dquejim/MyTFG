@@ -30,8 +30,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+//Actividad para administrar la carta del restaurante, en la que podremos ver los productos que ofrece,
+//sus ingredientes y elegir uno como nuestro favorito
 public class Food_Activity extends AppCompatActivity {
 
+    //Declaración de variables
     BottomNavigationView bottomNavigationView;
 
     CardView sandwich_option,pizza_option,camp_option,burguer_option,potato_option,bread_option;
@@ -54,20 +57,65 @@ public class Food_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.food_activity);
+        //Escondemos el ActionBar de la App, ya que no lo usarmos
         getSupportActionBar().hide();
 
+        //Creamos un nuevo objeto para conectarnos a la base de datos
         db_management = new  DB_Management(getBaseContext());
+
+        //Hacemos uso del método de la clase Utils para obtener el usuario con el que estamos logueados
         sharedPreferences  = getSharedPreferences("user", MODE_PRIVATE);
         userName = utils.getPreferences(sharedPreferences);
 
+        //Iniciamos los componentes gráficos y algunos procesos necesarios
         initComponents();
 
-        recAdapter.setOnClickListener(new View.OnClickListener() {
+        //Listeners de los distintos clickables de la actividad
+        View.OnClickListener listener = new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
-                showDetails(view);
+            public void onClick(View v)
+            {
+                switch (v.getId())
+                {
+                    case R.id.sandwichButton:
+                        loadMenuOptions("Sandwiches");
+                        break;
+
+                    case R.id.pizzaButton:
+                        loadMenuOptions("Pizzas");
+                        break;
+
+                    case R.id.campButton:
+                        loadMenuOptions("Camperos");
+                        break;
+
+                    case R.id.burguerButton:
+                        loadMenuOptions("Hamburguesas");
+                        break;
+
+                    case R.id.potatoeButton:
+                        loadMenuOptions("Patatas");
+                        break;
+
+                    case R.id.breadButton:
+                        loadMenuOptions("Bocadillos");
+                        break;
+
+                    default:
+                        break;
+                }
             }
-        });
+        };
+
+        recAdapter.setOnClickListener(listener);
+        sandwich_option.setOnClickListener(listener);
+        pizza_option.setOnClickListener(listener);
+        camp_option.setOnClickListener(listener);
+        bread_option.setOnClickListener(listener);
+        potato_option.setOnClickListener(listener);
+        burguer_option.setOnClickListener(listener);
+
 
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -77,45 +125,10 @@ public class Food_Activity extends AppCompatActivity {
             }
         });
 
-        sandwich_option.setOnClickListener(new View.OnClickListener() {
+        recAdapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loadMenuOptions("Sandwiches");
-            }
-        });
-
-        pizza_option.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                loadMenuOptions("Pizzas");
-            }
-        });
-
-        camp_option.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                loadMenuOptions("Camperos");
-            }
-        });
-        
-        burguer_option.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                loadMenuOptions("Hamburguesas");
-            }
-        });
-
-        potato_option.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                loadMenuOptions("Patatas");
-            }
-        });
-
-        bread_option.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                loadMenuOptions("Bocadillos");
+                showDetails(view);
             }
         });
     }
@@ -137,12 +150,13 @@ public class Food_Activity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         presentationLayout = findViewById(R.id.presentationLayout);
 
-        //Le indicamos el adaptador a usar, así como su layout
+        //Le indicamos a nuestro recyclerView el adaptador a usar, así como su layout
         recAdapter = new RecyclerAdapter(productList);
         recyclerView.setAdapter(recAdapter);
         recyclerView.setLayoutManager(layoutManager);
     }
 
+    //Método que carga el menú para navegar entre acticidades
     private void loadMenu(MenuItem item){
         Intent intent = null;
 
@@ -161,10 +175,11 @@ public class Food_Activity extends AppCompatActivity {
         }
 
         startActivity(intent);
+        //Eliminamos la animación entre transiciones del intent
         overridePendingTransition(0,0);
     }
 
-    //Metodo para crear la tarea asincrona
+    //Taréa asincrona que obtiene el menu cuando estamos conectados a Internet
     private class getOnlineMenu extends AsyncTask<String, Void, String> {
         String result;
 
@@ -188,7 +203,7 @@ public class Food_Activity extends AppCompatActivity {
                         String price = jsonObject.getString("price");
                         String description = jsonObject.getString("description");
 
-                        //Creamos un objeto comida y lo añadimos a la lista
+                        //Creamos un objeto producto y lo añadimos a la lista
                         productList.add(new Product(id, name, week_day, price,description));
                     }
                 }
@@ -199,25 +214,28 @@ public class Food_Activity extends AppCompatActivity {
             return result;
         }
 
+        //Indicamos la funcion a realizar para cuando el proceso haya terminado
         @Override
         protected void onPostExecute(String s) {
             recAdapter.notifyDataSetChanged();
         }
     }
 
-    //Metodo para crear la tarea asincrona
+    //Taréa asincrona que obtiene el menu cuando no estamos conectados a Internet
     private class getOffLineMenu extends AsyncTask<String, Void, String> {
         String result = "";
 
         //Indicamos la funcion de la tarea asincrona, que será hacer peticiones GET a la API
         @Override
         protected String doInBackground(String... strings) {
+            //LLamada a la base de datos
             productList = (ArrayList<Product>) db_management.getProducts(strings[0]);
             return result;
         }
 
         @Override
         protected void onPostExecute(String s) {
+            //Volvemos a sobrecargar el adaptador, ya que al pasar de online a offline y viceversa podría dar problemas
             recAdapter = new RecyclerAdapter(productList);
             recyclerView.setAdapter(recAdapter);
             recyclerView.setLayoutManager(layoutManager);
@@ -232,17 +250,19 @@ public class Food_Activity extends AppCompatActivity {
         }
     }
 
+    //Método que limpia la lista de productos y gestiona la carga del menu, dependiendo de si disponemos de conexión a Internet o no
     private void loadMenuOptions(String menu_option){
         productList.clear();
         presentationLayout.setVisibility(View.GONE);
 
-        if(utils.comprobarInternet(getBaseContext())) {
+        if(utils.checkInternetConnection(getBaseContext())) {
             new getOnlineMenu().execute("GET", "/selectFood.php?category=\"" + menu_option + "\"");
         }else{
             new getOffLineMenu().execute(menu_option);
         }
     }
 
+    //Método para iniciar un "POP UP" con la descripcion del producto y el boton de Me Gusta
     private void showDetails(View view){
        int position = recyclerView.getChildAdapterPosition(view);
        Intent intent = new Intent(Food_Activity.this,popUpActivity.class);
