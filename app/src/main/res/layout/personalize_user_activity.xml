@@ -82,7 +82,7 @@
                 android:id="@+id/button"
                 android:layout_width="191dp"
                 android:layout_height="53dp"
-                android:backgroundTint="#30685E"
+                android:backgroundTint="#A5A8A8"
                 android:text="Aceptar"
                 android:textColor="#FAF8F8"
                 android:textColorHighlight="#553232"

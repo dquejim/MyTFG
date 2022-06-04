@@ -144,7 +144,7 @@ public class NewAccount_Activity extends AppCompatActivity {
             //Si el usuario no existe
             if(s.equals("[]")){
                 //Iniciamos una tarea asincrona para crear un usuario con los datos dados
-                new NewAccount_Activity.insertUserTask().execute("GET","/insertUser.php?name="+textNameR.getText()+"&password="+textPasswordR.getText()+"&number="+textNumberR.getText()+"&adress="+textAdressR.getText()+"&fav_food="+textAdressR.getText());
+                new NewAccount_Activity.insertUserTask().execute("GET","/insertUser.php?name="+textNameR.getText()+"&password="+textPasswordR.getText()+"&number="+textNumberR.getText()+"&adress="+textAdressR.getText()+"&fav_food=-");
 
                 //Iniciamos el intent pasandole el nombre de usuario
                 utils.setPreferences(textNameR.getText().toString(), sharedPreferences);

@@ -49,7 +49,6 @@ public class popUpActivity extends AppCompatActivity {
         product = (Product) getIntent().getSerializableExtra("Product");
 
         initComponents();
-
     }
 
     //Iniciamos componentes uniendolos con la vista,además de variables/procesos

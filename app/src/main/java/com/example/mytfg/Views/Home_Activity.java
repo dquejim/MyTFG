@@ -12,12 +12,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.example.mytfg.Control.DB_Management;
 import com.example.mytfg.Control.HttpConnect;
 import com.example.mytfg.Control.Utils;
 import com.example.mytfg.Models.Local;
 import com.example.mytfg.Models.Offer;
+import com.example.mytfg.Models.User;
 import com.example.mytfg.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -41,12 +43,15 @@ public class Home_Activity extends AppCompatActivity{
     Offer firstOffer = null;
     Offer secondOffer = null;
     Local local = null;
+    User myUser;
     String now;
     String userName;
 
     ImageButton exitButton,facebook_button,instagram_button,maps_button;
 
-    TextView userNameView,firstOfferDesc,secondOfferDesc,firstOfferPrice,secondOfferPrice,txtLocalNumber;
+    TextView firstOfferDesc,secondOfferDesc,firstOfferPrice,secondOfferPrice,txtLocalNumber,txtFavouriteHome;
+
+    CardView favouriteViewHome;
 
     BottomNavigationView bottomNavigationView;
 
@@ -80,7 +85,7 @@ public class Home_Activity extends AppCompatActivity{
             {
                 switch (v.getId())
                 {
-                    case R.id.exitButton:
+                    case R.id.exitButtonHome:
                         Intent intent = new Intent(Home_Activity.this,Login_Activity.class);
                         startActivity(intent);
                         break;
@@ -97,7 +102,7 @@ public class Home_Activity extends AppCompatActivity{
                         navigateTo(local.getUbicationLink());
                         break;
 
-                    case R.id.txtLocalPhone:
+                    case R.id.txtLocalPhoneHome:
                         navigateTo(local.getNumber());
                         break;
 
@@ -133,15 +138,19 @@ public class Home_Activity extends AppCompatActivity{
         bottomNavigationView = findViewById(R.id.menu);
         bottomNavigationView.setSelectedItemId(R.id.home_option);
 
-        userNameView = findViewById(R.id.userNameView);
-        txtLocalNumber = findViewById(R.id.txtLocalPhone);
+        txtLocalNumber = findViewById(R.id.txtLocalPhoneHome);
+        txtFavouriteHome = findViewById(R.id.txtFavouriteHome);
 
-        exitButton = findViewById(R.id.exitButton);
+        favouriteViewHome = findViewById(R.id.favouriteViewHome);
+
+        exitButton = findViewById(R.id.exitButtonHome);
         facebook_button = findViewById(R.id.facebook_button);
         maps_button = findViewById(R.id.maps_button);
         instagram_button = findViewById(R.id.instagram_button);
 
-        userNameView.setText("Bienvenido " +userName + "!");
+        if(!utils.checkInternetConnection(getBaseContext()) || userName.equals("Invitado")){
+            favouriteViewHome.setVisibility(View.GONE);
+        }
     }
 
     //Tarea asincrona para obtener todas las ofertas
@@ -228,6 +237,52 @@ public class Home_Activity extends AppCompatActivity{
         }
     }
 
+    //Tarea asincrona para obtener un usuario y sus datos
+    private class getUserTask extends AsyncTask<String, Void, String> {
+        //Declaramos un intent hacia la home_activity
+        String result;
+
+        //Indicamos la funcion de la tarea asincrona, que será hacer peticiones GET a la API
+        @Override
+        protected String doInBackground(String... strings) {
+            result = HttpConnect.getRequest(strings[1]);
+            try {
+                if (result != null) {
+                    JSONArray jsonArr = new JSONArray(result);
+
+                    for (int i = 0; i < jsonArr.length(); i++) {
+                        JSONObject jsonObject = jsonArr.getJSONObject(i);
+
+                        //Obtenemos los datos de interes de nuestro objeto JSON
+                        String user = jsonObject.getString("user");
+                        String password = jsonObject.getString("password");
+                        String number = jsonObject.getString("number");
+                        String adress = jsonObject.getString("adress");
+                        String fav_food = jsonObject.getString("fav_food");
+
+                        //Cargamos los datos del local a nuestro objeto
+                        myUser = new User(user, password, number, adress,fav_food);
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return result;
+        }
+
+        //Indicamos la función del proceso una vez haya acabado
+        @Override
+        protected void onPostExecute(String s) {
+            if(myUser.getFav_food().equals("-")){
+                favouriteViewHome.setVisibility(View.GONE);
+            }else{
+                txtFavouriteHome.setText(myUser.getFav_food());
+            }
+        }
+    }
+
+
     //Método para cargar y gestionar el menu para navegar entre actividades
     private void loadMenu(MenuItem item){
         Intent intent = null;
@@ -271,6 +326,7 @@ public class Home_Activity extends AppCompatActivity{
         if(utils.checkInternetConnection(this)){
             new getOfferTask().execute("GET","/selectOffer.php?week_day=\""+now+"\"");
             new getLocalTask().execute("GET","/selectLocal.php");
+            new Home_Activity.getUserTask().execute("GET","/selectUser.php?user=\""+userName+"\"");
 
             //Si no disponemos, lo hace de la base de datos
         }else{

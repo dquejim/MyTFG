@@ -10,7 +10,7 @@
     <EditText
         android:id="@+id/textPassword"
         android:layout_width="296dp"
-        android:layout_height="36dp"
+        android:layout_height="43dp"
         android:background="#585A5A"
         android:ems="10"
         android:hint="Contraseña"
@@ -25,7 +25,7 @@
         app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.584" />
+        app:layout_constraintVertical_bias="0.555" />
 
     <EditText
         android:id="@+id/textName"
@@ -43,47 +43,47 @@
         android:textColorHint="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
+        app:layout_constraintVertical_bias="0.459" />
 
     <Button
         android:id="@+id/bLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="#6F8855"
+        android:backgroundTint="#F328A9"
         android:text="Iniciar sesión"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.711" />
+        app:layout_constraintVertical_bias="0.676" />
 
     <TextView
         android:id="@+id/bRegister"
         style="@android:style/Widget.Material.Spinner.Underlined"
         android:layout_width="342dp"
         android:layout_height="42dp"
-        android:background="#DFDBDB"
-        android:backgroundTint="#F3F3F3"
+        android:background="#00DFDBDB"
         android:fontFamily="@font/abel"
-        android:gravity="center"
+        android:gravity="center|center_vertical"
         android:paddingStart="10sp"
         android:paddingLeft="10sp"
         android:paddingTop="10sp"
         android:paddingEnd="10sp"
-        android:text="Eres nuevo? Haz click y regístrate!"
+        android:text="Eres nuevo? Haz click y regístrate..."
         android:textAlignment="center"
-        android:textColor="#132275"
+        android:textColor="#000000"
         android:textSize="20sp"
         android:textStyle="bold|italic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.841" />
+        app:layout_constraintVertical_bias="0.791" />
 
     <ImageView
         android:id="@+id/imageView"

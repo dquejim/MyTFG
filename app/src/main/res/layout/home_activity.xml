@@ -7,24 +7,24 @@
     android:background="@drawable/gradient_background">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+        android:id="@+id/secondOfferHome"
         android:layout_width="367dp"
         android:layout_height="63dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginTop="30dp"
         app:cardBackgroundColor="#FFFFFF"
         app:cardCornerRadius="20dp"
         app:cardElevation="150dp"
-        app:layout_constraintBottom_toTopOf="@+id/borderView"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView2"
-        app:layout_constraintVertical_bias="0.666">
+        app:layout_constraintTop_toBottomOf="@+id/fisrtOfferHome"
+        app:layout_constraintVertical_bias="0.0">
 
         <ImageView
             android:id="@+id/imageView7"
             android:layout_width="56dp"
             android:layout_height="match_parent"
-            android:background="#0f110c"
+            android:background="#5EEB5B"
             app:srcCompat="@android:color/transparent" />
 
         <TextView
@@ -49,7 +49,7 @@
     </androidx.cardview.widget.CardView>
 
     <ImageButton
-        android:id="@+id/exitButton"
+        android:id="@+id/exitButtonHome"
         android:layout_width="78dp"
         android:layout_height="56dp"
         android:backgroundTint="#CECCCC"
@@ -61,24 +61,8 @@
         app:layout_constraintVertical_bias="0.044"
         app:srcCompat="@drawable/exit_icon" />
 
-    <TextView
-        android:id="@+id/userNameView"
-        android:layout_width="231dp"
-        android:layout_height="62dp"
-        android:fontFamily="monospace"
-        android:gravity="center"
-        android:textAlignment="center"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.728"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.046" />
-
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView2"
+        android:id="@+id/fisrtOfferHome"
         android:layout_width="367dp"
         android:layout_height="63dp"
         app:cardBackgroundColor="#FFFFFF"
@@ -88,7 +72,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.345">
+        app:layout_constraintVertical_bias="0.267">
 
         <TextView
             android:id="@+id/firstOfferDesc"
@@ -112,6 +96,7 @@
             android:id="@+id/firstOfferPrice"
             android:layout_width="58dp"
             android:layout_height="match_parent"
+            android:background="#5EEB5B"
             android:gravity="center"
             android:textAlignment="center"
             android:textColor="#FFFFFF"
@@ -120,33 +105,79 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
-        android:id="@+id/textView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/abel"
-        android:text="Created by David Quesada Jiménez"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/menu"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.949" />
-
-    <TextView
-        android:id="@+id/textView9"
+        android:id="@+id/txtViewOferts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/abel"
         android:text="OFERTAS DE LA SEMANA..."
         android:textColor="#000000"
         android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.173"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.19999999" />
+        app:layout_constraintVertical_bias="0.174" />
+
+    <TextView
+        android:id="@+id/txtLocalPhoneHome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:fontFamily="@font/abel"
+        android:gravity="center"
+        android:text="tlfn"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/exitButtonHome"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.058" />
+
+    <ImageButton
+        android:id="@+id/instagram_button"
+        android:layout_width="72dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="40dp"
+        android:backgroundTint="#00FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/menu"
+        app:layout_constraintEnd_toStartOf="@+id/maps_button"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/instagram_ico" />
+
+    <ImageButton
+        android:id="@+id/maps_button"
+        android:layout_width="72dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="40dp"
+        android:backgroundTint="#00FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/menu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/maps_icon" />
+
+    <ImageButton
+        android:id="@+id/facebook_button"
+        android:layout_width="72dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="40dp"
+        android:backgroundTint="#00FFFFFF"
+        app:layout_constraintBottom_toTopOf="@+id/menu"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.02"
+        app:layout_constraintStart_toEndOf="@+id/maps_button"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/facebook_ico" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/menu"
@@ -164,96 +195,71 @@
         app:menu="@menu/menu_layout" />
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView4"
-        android:layout_width="wrap_content"
+        android:id="@+id/favouriteViewHome"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/maps_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.77">
+        app:layout_constraintTop_toBottomOf="@+id/secondOfferHome">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageButton
-                android:id="@+id/maps_button"
-                android:layout_width="72dp"
-                android:layout_height="60dp"
-                android:backgroundTint="#00FFFFFF"
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/abel"
+                android:gravity="center"
+                android:text="Favorito..."
+                android:textColor="#000000"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.275"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/maps_icon" />
+                app:layout_constraintVertical_bias="0.0" />
 
-            <ImageButton
-                android:id="@+id/instagram_button"
-                android:layout_width="72dp"
-                android:layout_height="60dp"
+            <ImageView
+                android:id="@+id/heartIconHome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.042"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/red_heart_ico" />
+
+            <TextView
+                android:id="@+id/txtFavouriteHome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginEnd="40dp"
-                android:layout_marginBottom="10dp"
-                android:backgroundTint="#00FFFFFF"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/maps_button"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.506"
-                app:srcCompat="@drawable/instagram_ico" />
-
-            <ImageButton
-                android:id="@+id/facebook_button"
-                android:layout_width="72dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="40dp"
-                android:backgroundTint="#00FFFFFF"
+                android:fontFamily="@font/abel"
+                android:gravity="start|center_vertical"
+                android:text="TextView"
+                android:textColor="#000000"
+                android:textColorHighlight="#000000"
+                android:textColorHint="#000000"
+                android:textSize="16sp"
+                android:textStyle="italic"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/maps_button"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.493"
-                app:srcCompat="@drawable/facebook_ico" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/borderView"
-        android:layout_width="220dp"
-        android:layout_height="50dp"
-        app:cardBackgroundColor="#FFFFFF"
-        app:cardElevation="110dp"
-        app:layout_constraintBottom_toTopOf="@+id/cardView4"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#00FFFFFF">
-
-            <TextView
-                android:id="@+id/txtLocalPhone"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:clickable="true"
-                android:fontFamily="@font/abel"
-                android:gravity="center"
-                android:textColor="#000000"
-                android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toEndOf="@+id/heartIconHome"
+                app:layout_constraintTop_toBottomOf="@+id/textView8"
+                app:layout_constraintVertical_bias="0.0" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
