@@ -2,6 +2,7 @@ package com.example.mytfg.Views;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -58,6 +59,7 @@ public class Home_Activity extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.home_activity);
 
         //Escondemos el ActionBar
@@ -190,7 +192,14 @@ public class Home_Activity extends AppCompatActivity{
 
         @Override
         protected void onPostExecute(String s) {
-            loadOffer(offerList);
+            super.onPostExecute(s);
+            firstOffer = offerList.get(0);
+            secondOffer = offerList.get(1);
+
+            firstOfferDesc.setText(firstOffer.getName());
+            firstOfferPrice.setText(firstOffer.getPrice());
+            secondOfferDesc.setText(secondOffer.getName());
+            secondOfferPrice.setText(secondOffer.getPrice());
         }
     }
 
@@ -274,10 +283,12 @@ public class Home_Activity extends AppCompatActivity{
         //Indicamos la función del proceso una vez haya acabado
         @Override
         protected void onPostExecute(String s) {
-            if(myUser.getFav_food().equals("-")){
-                favouriteViewHome.setVisibility(View.GONE);
-            }else{
-                txtFavouriteHome.setText(myUser.getFav_food());
+            if(!userName.equals("Invitado")) {
+                if (myUser.getFav_food().equals("-")) {
+                    favouriteViewHome.setVisibility(View.GONE);
+                } else {
+                    txtFavouriteHome.setText(myUser.getFav_food());
+                }
             }
         }
     }
@@ -305,19 +316,6 @@ public class Home_Activity extends AppCompatActivity{
 
         //Eliminacion de la animacion del intent
         overridePendingTransition(0,0);
-    }
-
-    //Método para unir los datos de ofertas con la vista
-    private void loadOffer(ArrayList<Offer> myList){
-        offerList = myList;
-
-        firstOffer = offerList.get(0);
-        secondOffer = offerList.get(1);
-
-        firstOfferDesc.setText(firstOffer.getName());
-        firstOfferPrice.setText(firstOffer.getPrice());
-        secondOfferDesc.setText(secondOffer.getName());
-        secondOfferPrice.setText(secondOffer.getPrice());
     }
 
     //Método para cargar y gestionar los datos tanto de ofertas como del local

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -40,6 +41,7 @@ public class Login_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.login_activity);
         //Escondemos el actionBar de la actividad
         getSupportActionBar().hide();
@@ -114,7 +116,7 @@ public class Login_Activity extends AppCompatActivity {
                 searchedUser = new User(user,password,"","","");
 
                 //Iniciamos una tarea asincrona para obtener el usuario de esa base de datos
-                new Login_Activity.getUserTask().execute("GET","/selectUser.php?user=\""+user+"\"");
+                new Login_Activity.getUserTask().execute("GET","/selectUser.php?user='"+user+"'");
 
                 //Si no hay conexion a Internet, nos pregunta si queremos conectarnos como usuario
             }
@@ -160,12 +162,9 @@ public class Login_Activity extends AppCompatActivity {
                         String adress = jsonObject.getString("adress");
 
                         //Cargamos los datos del local a nuestro objeto
-                        myUser = new User(user, password, number, adress,"");
+                        myUser = new User(user, password, number, adress, "");
                     }
-
-                    //Si no hay conexion a Internet, nos pregunta si queremos conectarnos como usuario
                 }
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }

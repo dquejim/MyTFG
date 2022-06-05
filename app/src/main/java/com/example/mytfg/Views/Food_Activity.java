@@ -2,6 +2,8 @@ package com.example.mytfg.Views;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -37,7 +39,7 @@ public class Food_Activity extends AppCompatActivity {
     //Declaración de variables
     BottomNavigationView bottomNavigationView;
 
-    CardView sandwich_option,pizza_option,camp_option,burguer_option,potato_option,bread_option;
+    CardView sandwich_option,pizza_option,camp_option,burguer_option, potatoe_option,bread_option;
 
     ImageView infoPopUp;
     
@@ -56,6 +58,7 @@ public class Food_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.food_activity);
         //Escondemos el ActionBar de la App, ya que no lo usarmos
         getSupportActionBar().hide();
@@ -79,27 +82,27 @@ public class Food_Activity extends AppCompatActivity {
                 switch (v.getId())
                 {
                     case R.id.sandwichButton:
-                        loadMenuOptions("Sandwiches");
+                        loadMenuOptions("Sandwiches",sandwich_option);
                         break;
 
                     case R.id.pizzaButton:
-                        loadMenuOptions("Pizzas");
+                        loadMenuOptions("Pizzas",pizza_option);
                         break;
 
                     case R.id.campButton:
-                        loadMenuOptions("Camperos");
+                        loadMenuOptions("Camperos",camp_option);
                         break;
 
                     case R.id.burguerButton:
-                        loadMenuOptions("Hamburguesas");
+                        loadMenuOptions("Hamburguesas",burguer_option);
                         break;
 
                     case R.id.potatoeButton:
-                        loadMenuOptions("Patatas");
+                        loadMenuOptions("Patatas", potatoe_option);
                         break;
 
                     case R.id.breadButton:
-                        loadMenuOptions("Bocadillos");
+                        loadMenuOptions("Bocadillos",bread_option);
                         break;
 
                     default:
@@ -113,7 +116,7 @@ public class Food_Activity extends AppCompatActivity {
         pizza_option.setOnClickListener(listener);
         camp_option.setOnClickListener(listener);
         bread_option.setOnClickListener(listener);
-        potato_option.setOnClickListener(listener);
+        potatoe_option.setOnClickListener(listener);
         burguer_option.setOnClickListener(listener);
 
 
@@ -141,7 +144,7 @@ public class Food_Activity extends AppCompatActivity {
         pizza_option = findViewById(R.id.pizzaButton);
         camp_option = findViewById(R.id.campButton);
         burguer_option = findViewById(R.id.burguerButton);
-        potato_option = findViewById(R.id.potatoeButton);
+        potatoe_option = findViewById(R.id.potatoeButton);
         bread_option = findViewById(R.id.breadButton);
 
         infoPopUp = findViewById(R.id.infoPopUp);
@@ -251,9 +254,18 @@ public class Food_Activity extends AppCompatActivity {
     }
 
     //Método que limpia la lista de productos y gestiona la carga del menu, dependiendo de si disponemos de conexión a Internet o no
-    private void loadMenuOptions(String menu_option){
+    private void loadMenuOptions(String menu_option,CardView selectedView){
         productList.clear();
         presentationLayout.setVisibility(View.GONE);
+
+        sandwich_option.setCardBackgroundColor(Color.parseColor("#FDECEF"));
+        pizza_option.setCardBackgroundColor(Color.parseColor("#FDECEF"));
+        burguer_option.setCardBackgroundColor(Color.parseColor("#FDECEF"));
+        potatoe_option.setCardBackgroundColor(Color.parseColor("#FDECEF"));
+        bread_option.setCardBackgroundColor(Color.parseColor("#FDECEF"));
+        camp_option.setCardBackgroundColor(Color.parseColor("#FDECEF"));
+
+        selectedView.setCardBackgroundColor(Color.parseColor("#D33E43"));
 
         if(utils.checkInternetConnection(getBaseContext())) {
             new getOnlineMenu().execute("GET", "/selectFood.php?category=\"" + menu_option + "\"");

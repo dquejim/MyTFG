@@ -20,21 +20,10 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/textView13"
-                android:layout_width="0dp"
-                android:layout_height="4dp"
-                android:background="#000000"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
-
-            <TextView
                 android:id="@+id/txtFoodNumber"
                 android:layout_width="50dp"
                 android:layout_height="0dp"
+                android:background="#FFFFFF"
                 android:fontFamily="@font/abel"
                 android:gravity="center"
                 android:text="TextView"
@@ -50,6 +39,7 @@
                 android:id="@+id/txtFoodProduct"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:background="#FFFFFF"
                 android:fontFamily="@font/abel"
                 android:gravity="start|center_vertical"
                 android:text="TextView"
@@ -65,6 +55,7 @@
                 android:id="@+id/txtFoodPrice"
                 android:layout_width="50dp"
                 android:layout_height="0dp"
+                android:background="#FFFFFF"
                 android:fontFamily="@font/abel"
                 android:gravity="center"
                 android:text="TextView"
@@ -73,6 +64,18 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="0dp"
+                android:layout_height="4dp"
+                android:background="#000000"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0" />

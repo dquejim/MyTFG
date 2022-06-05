@@ -52,20 +52,22 @@
         android:id="@+id/bLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="70dp"
         android:backgroundTint="#F328A9"
         android:text="Iniciar sesión"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bRegister"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.676" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/bRegister"
         style="@android:style/Widget.Material.Spinner.Underlined"
         android:layout_width="342dp"
         android:layout_height="42dp"
+        android:layout_marginBottom="60dp"
         android:background="#00DFDBDB"
         android:fontFamily="@font/abel"
         android:gravity="center|center_vertical"
@@ -83,18 +85,18 @@
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.791" />
+        app:layout_constraintVertical_bias="1.0" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="202dp"
         android:layout_height="295dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.073"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/logo" />
 
     android:clickable="true"
